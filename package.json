@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/nico-vrn/CorpTrack/issues"
   },
-  "homepage": "https://github.com/nico-vrn/CorpTrack#readme"
+  "homepage": "https://github.com/nico-vrn/CorpTrack#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
