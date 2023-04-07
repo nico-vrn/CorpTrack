@@ -4,6 +4,7 @@
   "description": "Site d'information et de recherche de vulnérabilités sur les entreprises",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
