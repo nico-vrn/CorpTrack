@@ -15,6 +15,6 @@ tmp/
 dist/
 
 # Ignorer les fichiers de configuration spécifiques à l'environnement
-.env
+*.env
 
-.env
+
