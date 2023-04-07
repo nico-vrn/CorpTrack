@@ -37,73 +37,22 @@ function rechercher(){ //fonction de recherche
       document.getElementById('empty').textContent="le champs de recherche est vide";
     }
     else{
-        console.log("test")
-        var info_IP="https://api.shodan.io/shodan/host/8.8.8.8?key="+shodanKey; // fonctionne retourne les infos de l'IP
-        console.log(info_IP)
-        request(info_IP, afficher_resultat,"IP");
+      async function fetchData() {
+        try {
+          console.log("fetch");
+          const response = await fetch('/api/data');
+          const data = await response.json();
+          
+          // Utilisez les données récupérées pour mettre à jour votre page
+          console.log(data);
+        } catch (error) {
+          console.error('Erreur lors de la récupération des données:', error);
+        }
+      }      
+      fetchData();
+      
     }
     favoris();
-}
-
-function afficher_resultat(data,autre){ //affiche les résultats de la recherche
-    document.getElementById("bloc-gif-attente").style.display="none";
-    var response=JSON.parse(data.contents);
-    var cles=Object.keys(response); 
-    if (response.error){ //si erreur
-        document.getElementById('empty').textContent="Aucun résultat trouvé réessayez";
-    }
-    else{ //si pas d'erreur
-        if (autre=="IP"){ //si recherche est une IP
-            var resultat=[response.country_name,response.city, response.org, response.domains, response.ports];
-            var noms=["pays","ville","Organisation", "domaines", 'ports'];
-            affichage(resultat,noms);
-            initMap(response.latitude,response.longitude);
-            document.getElementById("map").style.display="block";
-            document.getElementById("text_map").style.display="block";
-        }
-        else{
-            //ancienne récupération des sous domaines pas juger utile à implémanter
-
-            /*var sous_domaine=[];  
-            for (var i=0;i<response.subdomains.length;i++){
-              sous_domaine.push(response.subdomains[i]);
-            }
-            var resultat=[response.domain, sous_domaine.length];*/
-            for (var resultat in response){ //récupération des résultats
-              if(response[resultat]==null){ //si résultat est null
-                //console.log(response[resultat]);
-                resultat=["Aucun résultat trouvé réessayez"];
-                noms=[""];
-              }
-              else{ //si résultat n'est pas null
-                var resultat=[cles[0],response[resultat]];
-                var noms=["domaine", "IP"];
-              }
-            }
-            affichage(resultat,noms);
-        }
-    }
-}
-
-function affichage(resultat,noms){ //affiche les résultats de la recherche
-    var nouveau; var bloc_result=document.getElementById("bloc-resultats");
-    for (var i=0;i<resultat.length;i++){ //pour chaque résultat
-        nouveau=document.createElement("p");
-        nouveau.textContent=noms[i]+": "+resultat[i];
-        nouveau.id=noms[i];
-        bloc_result.appendChild(nouveau);
-    }
-    if(noms[1]=="IP" && resultat[1]!=null){   //si recherche est une IP et que l'IP est trouvée
-      var pIP=document.getElementById("IP");
-      var btIP=document.createElement("button");
-      btIP.textContent=" Voir les informations sur cette IP";
-      btIP.addEventListener("click",function(){ //si on click affiche les informations sur l'IP
-        document.getElementById("champs_recherche").value=resultat[1];
-        rechercher();});
-      btIP.style.backgroundColor="grey";
-      pIP.appendChild(btIP);
-
-    }
 }
 
 //requete ajax
@@ -315,7 +264,7 @@ fetch('ressources/liste_company.json')
     companies = data;
     })
     .catch((error) => console.error('Erreur lors du chargement du fichier JSON:', error));
-    console.log(companies);
+    //console.log(companies);
 
 // Fonction pour créer l'autocomplétion
 function autocomplete(input, suggestions) {
