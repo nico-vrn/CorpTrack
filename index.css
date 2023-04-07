@@ -236,3 +236,21 @@ p#explication {
 		flex: 0;
 	}
 }
+
+#autocomplete-container {
+	position: absolute;
+	width: 100%;
+	z-index: 1;
+	background-color: black;
+	border: 1px solid #ccc;
+  }
+  
+  .autocomplete-suggestion {
+	padding: 5px;
+	cursor: pointer;
+  }
+  
+  .autocomplete-suggestion:hover {
+	background-color: red;
+  }
+  
