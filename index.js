@@ -52,6 +52,7 @@ function request(url, retour, autre){ //requete ajax
     .then(data => retour(data,autre));
 }
 
+
 //gestion de la map
 
 var map = null;
@@ -235,6 +236,7 @@ function clear_fav(){ //efface les favoris
         liste.removeChild(liste.firstChild);
     }
 }
+
 
 //auto-completion
 
