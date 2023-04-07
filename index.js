@@ -227,7 +227,7 @@ function clear_fav(){ //efface les favoris
 
 // Charger la liste des entreprises
 let companies = [];
-fetch('liste_company.json')
+fetch('ressources/liste_company.json')
     .then((response) => response.json())
     .then((data) => {
     companies = data;
