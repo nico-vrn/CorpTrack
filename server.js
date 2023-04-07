@@ -1,3 +1,7 @@
+const dotenv = require('dotenv');
+dotenv.config();
+const shodanKey = process.env.Key_shodan;
+
 const express = require('express');
 const path = require('path');
 

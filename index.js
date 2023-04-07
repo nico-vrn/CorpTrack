@@ -1,6 +1,4 @@
-require('dotenv').config();
-
-const API_shodan = process.env.Key_shodan;
+const shodanKey=""
 
 var bt_search=document.getElementById("btn-lancer-recherche");
 bt_search.addEventListener("click",rechercher);
@@ -12,9 +10,9 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
 })
 var recherche=document.getElementById("champs_recherche").value="";
 
-//son_ip() //récupération de l'IP
+son_ip() //récupération de l'IP
 function son_ip(){
-    var IP = "https://api.shodan.io/tools/myip?"+key;
+    var IP = "https://api.shodan.io/tools/myip?key=${shodanKey}";
     request(IP,afficher_IP)
 }
 
@@ -39,6 +37,19 @@ function rechercher(){ //fonction de recherche
       document.getElementById('empty').textContent="le champs de recherche est vide";
     }
     favoris();
+}
+
+//requete ajax
+
+function request(url, retour, autre){ //requete ajax
+    //clean();
+    document.getElementById("bloc-gif-attente").style.display="block";
+    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
+    .then(response => { 
+      if (response.ok) return response.json()
+      throw new Error('Network response was not ok.')
+    })
+    .then(data => retour(data,autre));
 }
 
 //gestion de la map
