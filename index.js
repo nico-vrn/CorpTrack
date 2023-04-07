@@ -1,4 +1,6 @@
-key=""; //clés API shodan
+require('dotenv').config();
+
+const API_shodan = process.env.Key_shodan;
 
 var bt_search=document.getElementById("btn-lancer-recherche");
 bt_search.addEventListener("click",rechercher);
