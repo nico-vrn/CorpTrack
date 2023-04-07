@@ -222,3 +222,6 @@ function clear_fav(){ //efface les favoris
         liste.removeChild(liste.firstChild);
     }
 }
+
+//auto-completion
+
