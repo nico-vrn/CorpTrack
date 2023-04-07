@@ -10,7 +10,7 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
 })
 var recherche=document.getElementById("champs_recherche").value="";
 
-son_ip() //récupération de l'IP
+//son_ip() //récupération de l'IP
 function son_ip(){
     var IP = "https://api.shodan.io/tools/myip?"+key;
     request(IP,afficher_IP)
@@ -28,7 +28,7 @@ function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de rech
 }
 
 function rechercher(){ //fonction de recherche
-    //console.log("recherche en cours");
+    console.log("recherche en cours");
     recherche=document.getElementById("champs_recherche").value;
     var url = "https://api.shodan.io/shodan/host/search?" + key + "&query=" + recherche + "&facets=country";
     var url2="https://api.shodan.io/shodan/host/search?key=${apiKey}&query=country:france&facets=country"
@@ -225,3 +225,50 @@ function clear_fav(){ //efface les favoris
 
 //auto-completion
 
+// Charger la liste des entreprises
+let companies = [];
+fetch('liste_company.json')
+    .then((response) => response.json())
+    .then((data) => {
+    companies = data;
+    })
+    .catch((error) => console.error('Erreur lors du chargement du fichier JSON:', error));
+    //console.log(companies);
+
+// Fonction pour créer l'autocomplétion
+function autocomplete(input, suggestions) {
+    //console.log('autocomplete');
+    const container = document.getElementById('autocomplete-container');
+    container.innerHTML = '';
+
+    suggestions.forEach((suggestion) => {
+    const div = document.createElement('div');
+    div.classList.add('autocomplete-suggestion');
+    div.textContent = suggestion;
+    div.addEventListener('click', () => {
+        input.value = suggestion;
+        container.innerHTML = '';
+    });
+
+    container.appendChild(div);
+    });
+}
+
+// Fonction pour gérer l'autocomplétion
+function gestion_autocomplete(event) {
+    //console.log('gestion_autocomplete');
+    const input = event.target;
+    const searchTerm = input.value.toLowerCase();
+    if (searchTerm === '') {
+        autocomplete(input, []);
+    return;
+    }
+    const suggestions = companies.filter((company) =>
+    company.toLowerCase().includes(searchTerm)
+    );
+    autocomplete(input, suggestions);
+}
+
+//Gestionnaire d'événements pour gérer l'autocomplétion
+const searchInput = document.getElementById('champs_recherche');
+searchInput.addEventListener('input', gestion_autocomplete);
