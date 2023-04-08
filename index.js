@@ -36,6 +36,7 @@ function rechercher(){ //fonction de recherche
     if(recherche[0]==undefined){ //si la recherche est vide
       document.getElementById('empty').textContent="le champs de recherche est vide";
     }
+    searchCompany();
     favoris();
 }
 
@@ -267,6 +268,27 @@ function gestion_autocomplete(event) {
     company.toLowerCase().includes(searchTerm)
     );
     autocomplete(input, suggestions);
+}
+
+function searchCompany() { // Fonction pour récuperer uniquement les informations nécessaires
+
+  fetch('https://recherche-entreprises.api.gouv.fr/search?q=' + recherche)
+  
+  .then(response => response.json())
+  .then(data => console.log(data.results[0]['siren'] 
+  + '\n' // Juste utilisé pour passer à la ligne lors de l'affichage dans la console
+  + data.results[0]['nom_complet'] 
+  + '\n'
+  + data.results[0]['date_creation']
+  + '\n'
+  + data.results[0].siege['geo_id']
+  + '\n'
+  + data.results[0].siege['siret']
+  + '\n'
+  + data.results[0].siege['adresse']))
+  
+  .catch(error => console.error(error))
+  
 }
 
 //Gestionnaire d'événements pour gérer l'autocomplétion
