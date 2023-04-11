@@ -7,6 +7,7 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
         rechercher();
 })
 var recherche=document.getElementById("champs_recherche").value="";
+let entreprises = [];
 
 son_ip() //récupération de l'IP
 function son_ip(){
@@ -32,39 +33,51 @@ function rechercher() { //lance la recherche
   if (terme_recherche[0] === undefined) {
     document.getElementById("empty").textContent = "le champs de recherche est vide";
   } else {
-    console.log('recherche: ' + terme_recherche)
-    searchCompany(terme_recherche);
-    //recherche_shodan();
+    console.log('recherche: ' + terme_recherche);
+    recherche_companie(terme_recherche)
+      .then(() => {
+        //affiche entreprises
+        console.log("TOP")
+        for (let i = 0; i < entreprises.length; i++) {
+          console.log("TOP2")
+          console.log("entreprises:",entreprises[i])
+          latitude=entreprises[i].siege.latitude;
+          longitude=entreprises[i].siege.longitude;
+        } 
+        console.log("TOP3")
+      })
+      .then (() => {
+        recherche_shodan();
+      })
+      .then(() => {
+        console.log("TOP4")
+        favoris();
+      })
+      .catch(error => console.error(error));
   }
-    favoris();
 }
 
-function searchCompany(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
-  console.log("company search")
-
-  fetch('https://recherche-entreprises.api.gouv.fr/search?q=' + terme_recherche)
-  
-  .then(response => response.json())
-  .then(data => console.log(data.results[0]['siren'] 
-  + '\n' // Juste utilisé pour passer à la ligne lors de l'affichage dans la console
-  + data.results[0]['nom_complet'] 
-  + '\n'
-  + data.results[0]['date_creation']
-  + '\n'
-  + data.results[0].siege['geo_id']
-  + '\n'
-  + data.results[0].siege['siret']
-  + '\n'
-  + data.results[0].siege['adresse']))
-  
-  .catch(error => console.error(error))
-  
+function recherche_companie(terme_recherche) {
+  console.log("company search");
+  return new Promise((resolve, reject) => {
+    fetch('https://recherche-entreprises.api.gouv.fr/search?q=' + terme_recherche)
+      .then(response => response.json())
+      .then(data => {
+        entreprises = [];
+        for (let i = 0; i < 1; i++) {
+          entreprises.push(data.results[i]);
+        }
+        console.log("entreprises:",entreprises);
+        resolve(entreprises);
+      })
+      .catch(error => reject(error));
+  });
 }
 
 function recherche_shodan(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
   async function fetchData() {
     try {
-      console.log("fetch");
+      console.log("shodan search");
       const response = await fetch(`/api/data/${terme_recherche}`);
       const data = await response.json();
       // affiche les données récupéré
