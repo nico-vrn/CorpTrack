@@ -80,11 +80,11 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/YuToutCourt/KeyLogger_USB?style=for-the-badge
-[contributors-url]: https://github.com/YuToutCourt/KeyLogger_USB/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/YuToutCourt/KeyLogger_USB.svg?style=for-the-badge
-[forks-url]: https://github.com/YuToutCourt/KeyLogger_USB/network/members
-[stars-shield]: https://img.shields.io/github/stars/YuToutCourt/KeyLogger_USB.svg?style=for-the-badge
-[stars-url]: https://github.com/YuToutCourt/KeyLogger_USB/stargazers
-[issues-shield]: https://img.shields.io/github/issues/YuToutCourt/KeyLogger_USB.svg?style=for-the-badge
-[issues-url]: https://github.com/YuToutCourt/KeyLogger_USB/issues
+[contributors-shield]: https://img.shields.io/github/contributors/nico-vrn/CorpTrack?style=for-the-badge
+[contributors-url]: https://github.com/nico-vrn/CorpTrack/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/nico-vrn/CorpTrack.svg?style=for-the-badge
+[forks-url]: https://github.com/nico-vrn/CorpTrack/network/members
+[stars-shield]: https://img.shields.io/github/stars/nico-vrn/CorpTrack.svg?style=for-the-badge
+[stars-url]: https://github.com/nico-vrn/CorpTrack/stargazers
+[issues-shield]: https://img.shields.io/github/issues/nico-vrn/CorpTrack.svg?style=for-the-badge
+[issues-url]: https://github.com/nico-vrn/CorpTrack/issues
