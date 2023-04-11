@@ -34,6 +34,8 @@ function rechercher() { //lance la recherche
     document.getElementById("empty").textContent = "le champs de recherche est vide";
   } else {
     console.log('recherche: ' + terme_recherche);
+    //aficher gif d'attente
+    document.getElementById("bloc-gif-attente").style.display="block";
     recherche_companie(terme_recherche)
       .then(() => {
         //affiche entreprises
@@ -54,6 +56,8 @@ function rechercher() { //lance la recherche
         favoris();
       })
       .catch(error => console.error(error));
+    //supprimer gif d'attente
+    document.getElementById("bloc-gif-attente").style.display="none";
   }
 }
 
