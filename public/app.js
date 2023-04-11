@@ -8,6 +8,8 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
 })
 var recherche=document.getElementById("champs_recherche").value="";
 let entreprises = [];
+let date120joursAvant
+let datejour
 
 son_ip() //récupération de l'IP
 function son_ip(){
@@ -29,11 +31,14 @@ function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de rech
 function bonne_date(){
   console.log("------- TOP2 : bonne_date en cours -------")
   const today = new Date();
-  console.log(today.toISOString()); // affiche la date d'aujourd'hui au format ISO : "2021-05-26T00:00:00.000Z" (le Z indique le fuseau horaire UTC)
+
+  const datejour = today.toISOString().replace(/Z$/, '');
+  console.log(datejour); // affiche la date d'aujourd'hui au format ISO : "2021-05-26T00:00:00.000Z" (le Z indique le fuseau horaire UTC)
   
-  const date120joursAvant = new Date(today.setDate(today.getDate() - 120)).toISOString();
+  const date120joursAvant = new Date(today.setDate(today.getDate() - 120)).toISOString().replace(/Z$/, '');
   console.log(date120joursAvant); // affiche la date d'il y a 120 jours au format ISO : "2021-04-06T00:00:00.000Z"
 
+  return date120joursAvant, datejour;
 }
 
 function rechercher() { //lance la recherche
@@ -59,8 +64,10 @@ function rechercher() { //lance la recherche
         //console.log("TOP3")
       })
       .then(() => {
-        bonne_date();
-        rechercher_vulnerabilites(terme_recherche);
+        date120joursAvant, datejour=bonne_date();
+      })
+      .then(() => {
+        rechercher_vulnerabilites(terme_recherche, date120joursAvant, datejour);
       })
       .then (() => {
         recherche_shodan();
@@ -92,10 +99,11 @@ function recherche_companie(terme_recherche) {
   });
 }
 
-function rechercher_vulnerabilites(nomEntreprise) {
+function rechercher_vulnerabilites(nomEntreprise, date120joursAvant, datejour) {
   console.log("------- TOP3 : rechercher_vulnerabilites en cours -------");
-  // Construire l'URL de l'API NVD
-  const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${date120joursAvant}&pubEndDate=${today.toISOString()}`;
+
+  const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${date120joursAvant}&pubEndDate=${datejour}`;
+  console.log("URL:", url); 
 
   // Envoyer une requête à l'API NVD
   fetch(url)
