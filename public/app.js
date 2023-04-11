@@ -26,33 +26,46 @@ function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de rech
   });
 }
 
+function bonne_date(){
+  console.log("------- TOP2 : bonne_date en cours -------")
+  const today = new Date();
+  console.log(today.toISOString()); // affiche la date d'aujourd'hui au format ISO : "2021-05-26T00:00:00.000Z" (le Z indique le fuseau horaire UTC)
+  
+  const date120joursAvant = new Date(today.setDate(today.getDate() - 120)).toISOString();
+  console.log(date120joursAvant); // affiche la date d'il y a 120 jours au format ISO : "2021-04-06T00:00:00.000Z"
+
+}
+
 function rechercher() { //lance la recherche
-  console.log("recherche en cours");
+  console.log("------- START : recherche en cours -------");
   terme_recherche = document.getElementById("champs_recherche").value;
 
   if (terme_recherche[0] === undefined) {
     document.getElementById("empty").textContent = "le champs de recherche est vide";
   } else {
-    console.log('recherche: ' + terme_recherche);
+    console.log('terme_recherche: ' + terme_recherche);
     //aficher gif d'attente
     document.getElementById("bloc-gif-attente").style.display="block";
     recherche_companie(terme_recherche)
       .then(() => {
         //affiche entreprises
-        console.log("TOP")
+        //console.log("TOP")
         for (let i = 0; i < entreprises.length; i++) {
-          console.log("TOP2")
-          console.log("entreprises:",entreprises[i])
+          //console.log("TOP2")
+          console.log("Liste entreprises:",entreprises[i])
           latitude=entreprises[i].siege.latitude;
           longitude=entreprises[i].siege.longitude;
         } 
-        console.log("TOP3")
+        //console.log("TOP3")
+      })
+      .then(() => {
+        bonne_date();
+        rechercher_vulnerabilites(terme_recherche);
       })
       .then (() => {
         recherche_shodan();
       })
       .then(() => {
-        console.log("TOP4")
         favoris();
       })
       .catch(error => console.error(error));
@@ -61,8 +74,9 @@ function rechercher() { //lance la recherche
   }
 }
 
+//recherche entreprise
 function recherche_companie(terme_recherche) {
-  console.log("company search");
+  console.log("------- TOP1 : recherche_companie en cours -------");
   return new Promise((resolve, reject) => {
     fetch('https://recherche-entreprises.api.gouv.fr/search?q=' + terme_recherche)
       .then(response => response.json())
@@ -71,14 +85,38 @@ function recherche_companie(terme_recherche) {
         for (let i = 0; i < 1; i++) {
           entreprises.push(data.results[i]);
         }
-        console.log("entreprises:",entreprises);
+        //console.log("entreprises:",entreprises);
         resolve(entreprises);
       })
       .catch(error => reject(error));
   });
 }
 
+function rechercher_vulnerabilites(nomEntreprise) {
+  console.log("------- TOP3 : rechercher_vulnerabilites en cours -------");
+  // Construire l'URL de l'API NVD
+  const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${date120joursAvant}&pubEndDate=${today.toISOString()}`;
+
+  // Envoyer une requête à l'API NVD
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      // Traiter les données de réponse
+      console.log(`Vulnérabilités pour l'entreprise ${nomEntreprise}:`);
+      if (data.result.CVE_Items.length === 0) {
+        console.log("Aucune vulnérabilité trouvée.");
+      } else {
+        data.result.CVE_Items.forEach(cve => {
+          console.log(`${cve.cve.CVE_data_meta.ID}: ${cve.cve.description.description_data[0].value}`);
+        });
+      }
+    })
+    .catch(error => console.error(error));
+}
+
+//
 function recherche_shodan(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
+  console.log("------- TOP4 : recherche_shodan en cours -------");
   async function fetchData() {
     try {
       console.log("shodan search");
@@ -93,8 +131,8 @@ function recherche_shodan(terme_recherche) { // Fonction pour récuperer uniquem
   fetchData();
 }
 
-//requete ajax
 
+//requete ajax
 function request(url, retour, autre){ //requete ajax
     //clean();
     document.getElementById("bloc-gif-attente").style.display="block";
