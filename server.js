@@ -10,20 +10,18 @@ const port = 3000;
 
 app.use(express.static('public'));
 
-app.get('/api/data', async (req, res) => {
+app.get('/api/data/:search', async (req, res) => {
   const shodanKey = process.env.shodanKey;
-  // Utilisez l'apiKey pour effectuer un appel API à l'API externe
-  // et récupérer les données
-  const data = await fetchExternalApi(shodanKey);
+  console.log('API Key:', shodanKey)
+  const searchTerm = req.params.search;
+  const data = await fetchExternalApi(shodanKey, searchTerm);
   res.json(data);
 });
 
-async function fetchExternalApi(apiKey) {
-  // Implémentez cette fonction pour effectuer l'appel API avec l'apiKey
-  // et retourner les données. Par exemple:
-  console.log('API Key:', apiKey);
-  const apiUrl = "https://api.shodan.io/shodan/host/8.8.8.8?key="+apiKey;
-  console.log("API URL:", apiUrl)
+
+async function fetchExternalApi(apiKey, searchTerm) {
+  const apiUrl = `https://api.shodan.io/shodan/host/${searchTerm}?key=${apiKey}`;
+  console.log('API URL:', apiUrl)
   const response = await fetch(apiUrl);
   const textResponse = await response.text();
   console.log('API Response:', textResponse);
@@ -35,4 +33,3 @@ async function fetchExternalApi(apiKey) {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-

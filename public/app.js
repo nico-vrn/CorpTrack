@@ -25,28 +25,26 @@ function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de rech
   });
 }
 
-function rechercher(){ //fonction de recherche
-    console.log("recherche en cours");
-    recherche=document.getElementById("champs_recherche").value;
-    if(recherche[0]==undefined){ //si la recherche est vide
-      document.getElementById('empty').textContent="le champs de recherche est vide";
+function rechercher() { //lance la recherche
+  console.log("recherche en cours");
+  recherche = document.getElementById("champs_recherche").value;
+
+  if (recherche[0] === undefined) {
+    document.getElementById("empty").textContent = "le champs de recherche est vide";
+  } else {
+    async function fetchData() {
+      try {
+        console.log("fetch");
+        const response = await fetch(`/api/data/${recherche}`);
+        const data = await response.json();
+        // affiche les données récupéré
+        console.log(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données:", error);
+      }
     }
-    else{
-      async function fetchData() {
-        try {
-          console.log("fetch");
-          const response = await fetch('/api/data');
-          const data = await response.json();
-          
-          // Utilisez les données récupérées pour mettre à jour votre page
-          console.log(data);
-        } catch (error) {
-          console.error('Erreur lors de la récupération des données:', error);
-        }
-      }      
-      fetchData();
-      
-    }
+    fetchData();
+  }
     favoris();
 }
 
