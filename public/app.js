@@ -27,25 +27,53 @@ function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de rech
 
 function rechercher() { //lance la recherche
   console.log("recherche en cours");
-  recherche = document.getElementById("champs_recherche").value;
+  terme_recherche = document.getElementById("champs_recherche").value;
 
-  if (recherche[0] === undefined) {
+  if (terme_recherche[0] === undefined) {
     document.getElementById("empty").textContent = "le champs de recherche est vide";
   } else {
-    async function fetchData() {
-      try {
-        console.log("fetch");
-        const response = await fetch(`/api/data/${recherche}`);
-        const data = await response.json();
-        // affiche les données récupéré
-        console.log(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des données:", error);
-      }
-    }
-    fetchData();
+    console.log('recherche: ' + terme_recherche)
+    searchCompany(terme_recherche);
+    //recherche_shodan();
   }
     favoris();
+}
+
+function searchCompany(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
+  console.log("company search")
+
+  fetch('https://recherche-entreprises.api.gouv.fr/search?q=' + terme_recherche)
+  
+  .then(response => response.json())
+  .then(data => console.log(data.results[0]['siren'] 
+  + '\n' // Juste utilisé pour passer à la ligne lors de l'affichage dans la console
+  + data.results[0]['nom_complet'] 
+  + '\n'
+  + data.results[0]['date_creation']
+  + '\n'
+  + data.results[0].siege['geo_id']
+  + '\n'
+  + data.results[0].siege['siret']
+  + '\n'
+  + data.results[0].siege['adresse']))
+  
+  .catch(error => console.error(error))
+  
+}
+
+function recherche_shodan(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
+  async function fetchData() {
+    try {
+      console.log("fetch");
+      const response = await fetch(`/api/data/${terme_recherche}`);
+      const data = await response.json();
+      // affiche les données récupéré
+      console.log(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données:", error);
+    }
+  }
+  fetchData();
 }
 
 //requete ajax
@@ -280,7 +308,7 @@ function autocomplete(input, suggestions) {
 
 // Fonction pour gérer l'autocomplétion
 function gestion_autocomplete(event) {
-    //console.log('gestion_autocomplete');
+    //console.log('gestion autocomplete');
     const input = event.target;
     const searchTerm = input.value.toLowerCase();
     if (searchTerm === '') {
