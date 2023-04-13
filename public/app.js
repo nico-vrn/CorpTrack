@@ -38,7 +38,7 @@ function bonne_date(){
   const date120joursAvant = new Date(today.setDate(today.getDate() - 120)).toISOString().replace(/Z$/, '');
   console.log(date120joursAvant); // affiche la date d'il y a 120 jours au format ISO : "2021-04-06T00:00:00.000Z"
 
-  return date120joursAvant, datejour;
+  return [date120joursAvant, datejour];
 }
 
 function rechercher() { //lance la recherche
@@ -64,10 +64,11 @@ function rechercher() { //lance la recherche
         //console.log("TOP3")
       })
       .then(() => {
-        date120joursAvant, datejour=bonne_date();
-      })
-      .then(() => {
-        rechercher_vulnerabilites(terme_recherche, date120joursAvant, datejour);
+        const [dateAncienne, dateActuelle] = bonne_date();
+        console.log("Date d'aujourd'hui :", dateActuelle);
+        console.log("Il y a 120 jours :", dateAncienne);
+
+        rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
       })
       .then (() => {
         recherche_shodan();
@@ -99,10 +100,13 @@ function recherche_companie(terme_recherche) {
   });
 }
 
-function rechercher_vulnerabilites(nomEntreprise, date120joursAvant, datejour) {
+function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuelle) {
   console.log("------- TOP3 : rechercher_vulnerabilites en cours -------");
 
-  const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${date120joursAvant}&pubEndDate=${datejour}`;
+  console.log("Date d'aujourd'hui :", dateActuelle);
+  console.log("Il y a 120 jours :", dateAncienne);
+
+  const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${dateAncienne}&pubEndDate=${dateActuelle}`;
   console.log("URL:", url); 
 
   // Envoyer une requête à l'API NVD
