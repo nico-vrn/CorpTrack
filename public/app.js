@@ -107,7 +107,7 @@ function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuelle) {
   console.log("Il y a 120 jours :", dateAncienne);
 
   const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${dateAncienne}&pubEndDate=${dateActuelle}`;
-  console.log("URL:", url); 
+  console.log("URL:", url);
 
   // Envoyer une requête à l'API NVD
   fetch(url)
@@ -115,16 +115,18 @@ function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuelle) {
     .then(data => {
       // Traiter les données de réponse
       console.log(`Vulnérabilités pour l'entreprise ${nomEntreprise}:`);
-      if (data.result.CVE_Items.length === 0) {
+      if (data.vulnerabilities.length === 0) {
         console.log("Aucune vulnérabilité trouvée.");
       } else {
-        data.result.CVE_Items.forEach(cve => {
-          console.log(`${cve.cve.CVE_data_meta.ID}: ${cve.cve.description.description_data[0].value}`);
+        data.vulnerabilities.forEach(vulnerability => {
+          const cve = vulnerability.cve;
+          console.log(`${cve.id}: ${cve.descriptions[0].value}`);
         });
       }
     })
     .catch(error => console.error(error));
 }
+
 
 //
 function recherche_shodan(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
