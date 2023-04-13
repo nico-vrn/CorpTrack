@@ -73,12 +73,13 @@ async function rechercher() { //lance la recherche
 
       const shodanData = await recherche_shodan(terme_recherche);
       console.log("shodanData:", shodanData);
-      
+
       if (shodanData === undefined) {
         document.getElementById("empty").textContent = "Aucune entreprise trouvée";
         console.log("Aucune entreprise trouvée");
       } else {
         console.log("shodanData city:", shodanData.city);
+        afficher_resultat(null, shodanData, null);
       }
 
     } 
@@ -94,11 +95,13 @@ async function rechercher() { //lance la recherche
         console.log("Aucune entreprise trouvée");
       } else {
         console.log("Liste entreprises:",entreprises[0])
-        /*for (let i = 0; i < entreprises.length; i++) {
+        for (let i = 0; i < entreprises.length; i++) {
           console.log("Liste entreprises:",entreprises[i])
           latitude=entreprises[i].siege.latitude;
           longitude=entreprises[i].siege.longitude;
-        } */
+          console.log("latitude:",latitude);
+          console.log("longitude:",longitude);
+        } 
 
         const [dateAncienne, dateActuelle] = bonne_date();
         //console.log("Date d'aujourd'hui :", dateActuelle);
@@ -113,9 +116,10 @@ async function rechercher() { //lance la recherche
         } else {
           let n=0;
           for (let i = 0; i < vulnerabilities.length; i++) {
-            console.log("Liste vulnérabilités:", vulnerabilities[i]);
+            //console.log("Liste vulnérabilités:", vulnerabilities[i]);
           }
           console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
+          afficher_resultat(entreprises, null, vulnerabilities);
         }
       }
     }
@@ -125,6 +129,8 @@ async function rechercher() { //lance la recherche
 
     //supprimer gif d'attente
     document.getElementById("bloc-gif-attente").style.display="none";
+    
+    
   }
 }
 
@@ -193,6 +199,48 @@ async function recherche_shodan(terme_recherche) {
   });
 }
 
+function afficher_resultat(entreprises, shodanData, vulnerabilities) {
+  console.log("------- TOP5 : afficher_resultat en cours -------");
+
+  const blocResultats = document.getElementById("bloc-resultats");
+  blocResultats.innerHTML = "";
+
+  if (shodanData) {
+    const ipInfo = document.createElement("div");
+    ipInfo.innerHTML = `<h3>Informations Shodan</h3>
+                        <p><strong>Adresse IP :</strong> ${shodanData.ip_str}</p>
+                        <p><strong>Ville :</strong> ${shodanData.city}</p>
+                        <p><strong>Pays :</strong> ${shodanData.country_name}</p>`;
+    blocResultats.appendChild(ipInfo);
+    latitude=shodanData.latitude;
+    longitude=shodanData.longitude;
+  }
+
+  if (entreprises && entreprises.length > 0) {
+    const entrepriseInfo = document.createElement("div");
+    entrepriseInfo.innerHTML = `<h3>Informations sur l'entreprise</h3>
+                                 <p><strong>Nom :</strong> ${entreprises[0].denomination}</p>
+                                 <p><strong>Adresse :</strong> ${entreprises[0].siege.adresse}</p>
+                                 <p><strong>Code postal :</strong> ${entreprises[0].siege.code_postal}</p>`;
+    blocResultats.appendChild(entrepriseInfo);
+    latitude=parseFloat(entreprises[0].siege.latitude);
+    longitude=parseFloat(entreprises[0].siege.longitude);
+  }
+
+  if (vulnerabilities && vulnerabilities.length > 0) {
+    const vulnInfo = document.createElement("div");
+    vulnInfo.innerHTML = `<h3>Vulnérabilités trouvées (${vulnerabilities.length})</h3>`;
+    vulnerabilities.forEach((vulnerability, index) => {
+      vulnInfo.innerHTML += `<p><strong>${index + 1}. ${vulnerability.cve.id} :</strong> ${vulnerability.cve.descriptions[0].value}</p>`;
+    });
+    blocResultats.appendChild(vulnInfo);
+  }
+
+  console.log("Latitude:", latitude, "Longitude:", longitude);
+  initMap(latitude, longitude);
+  document.getElementById("map").style.display="block";
+  document.getElementById("text_map").style.display="block";
+}
 
 
 //requete ajax
