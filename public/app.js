@@ -95,11 +95,13 @@ async function rechercher() { //lance la recherche
         console.log("Aucune entreprise trouvée");
       } else {
         console.log("Liste entreprises:",entreprises[0])
-        /*for (let i = 0; i < entreprises.length; i++) {
+        for (let i = 0; i < entreprises.length; i++) {
           console.log("Liste entreprises:",entreprises[i])
           latitude=entreprises[i].siege.latitude;
           longitude=entreprises[i].siege.longitude;
-        } */
+          console.log("latitude:",latitude);
+          console.log("longitude:",longitude);
+        } 
 
         const [dateAncienne, dateActuelle] = bonne_date();
         //console.log("Date d'aujourd'hui :", dateActuelle);
@@ -114,7 +116,7 @@ async function rechercher() { //lance la recherche
         } else {
           let n=0;
           for (let i = 0; i < vulnerabilities.length; i++) {
-            console.log("Liste vulnérabilités:", vulnerabilities[i]);
+            //console.log("Liste vulnérabilités:", vulnerabilities[i]);
           }
           console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
           afficher_resultat(entreprises, null, vulnerabilities);
@@ -198,6 +200,8 @@ async function recherche_shodan(terme_recherche) {
 }
 
 function afficher_resultat(entreprises, shodanData, vulnerabilities) {
+  console.log("------- TOP5 : afficher_resultat en cours -------");
+
   const blocResultats = document.getElementById("bloc-resultats");
   blocResultats.innerHTML = "";
 
@@ -208,6 +212,8 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
                         <p><strong>Ville :</strong> ${shodanData.city}</p>
                         <p><strong>Pays :</strong> ${shodanData.country_name}</p>`;
     blocResultats.appendChild(ipInfo);
+    latitude=shodanData.latitude;
+    longitude=shodanData.longitude;
   }
 
   if (entreprises && entreprises.length > 0) {
@@ -217,6 +223,8 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
                                  <p><strong>Adresse :</strong> ${entreprises[0].siege.adresse}</p>
                                  <p><strong>Code postal :</strong> ${entreprises[0].siege.code_postal}</p>`;
     blocResultats.appendChild(entrepriseInfo);
+    latitude=parseFloat(entreprises[0].siege.latitude);
+    longitude=parseFloat(entreprises[0].siege.longitude);
   }
 
   if (vulnerabilities && vulnerabilities.length > 0) {
@@ -227,6 +235,11 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
     });
     blocResultats.appendChild(vulnInfo);
   }
+
+  console.log("Latitude:", latitude, "Longitude:", longitude);
+  initMap(latitude, longitude);
+  document.getElementById("map").style.display="block";
+  document.getElementById("text_map").style.display="block";
 }
 
 
