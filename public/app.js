@@ -43,11 +43,11 @@ function bonne_date(){
 }
 
 //fonction qui vérifie si l'entrée est une adresse IP
-function isIPAddress(input) {
-  // Regex pour vérifier si l'entrée est une adresse IPv4 valide
+function estUneIP(input) {
+  //vérification si l'entrée est une adresse IPv4 valide
   const ipv4Pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
-  // Regex pour vérifier si l'entrée est une adresse IPv6 valide
+  //vérification si l'entrée est une adresse IPv6 valide
   const ipv6Pattern = /^((?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?!fe80:)[0-9a-fA-F]{1,4}:(:[0-9a-fA-F]{1,4}){1,6}|fe80:(:[0-9a-fA-F]{1,4}){1,6}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,4})$/;
 
   return ipv4Pattern.test(input) || ipv6Pattern.test(input);
@@ -67,7 +67,7 @@ async function rechercher() { //lance la recherche
     //aficher gif d'attente
     document.getElementById("bloc-gif-attente").style.display="block";
 
-    if (isIPAddress(terme_recherche)) {
+    if (estUneIP(terme_recherche)) {
       console.log("C'est une adresse IP.");
       await recherche_shodan(terme_recherche);
     } else {
