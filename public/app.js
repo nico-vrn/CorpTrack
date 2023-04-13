@@ -71,7 +71,16 @@ async function rechercher() { //lance la recherche
     if (estUneIP(terme_recherche)) {
       console.log("C'est une adresse IP.");
 
-      await recherche_shodan(terme_recherche);
+      const shodanData = await recherche_shodan(terme_recherche);
+      console.log("shodanData:", shodanData);
+      
+      if (shodanData === undefined) {
+        document.getElementById("empty").textContent = "Aucune entreprise trouvée";
+        console.log("Aucune entreprise trouvée");
+      } else {
+        console.log("shodanData city:", shodanData.city);
+      }
+
     } 
     else {
       console.log("Ce n'est pas une adresse IP.");
@@ -166,22 +175,24 @@ async function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuel
 }
 
 
-//
-async function recherche_shodan(terme_recherche) { 
+async function recherche_shodan(terme_recherche) {
   console.log("------- TOP4 : recherche_shodan en cours -------");
-  async function fetchData() {
+
+  return new Promise(async (resolve, reject) => {
     try {
-      console.log("shodan search");
       const response = await fetch(`/api/data/${terme_recherche}`);
       const data = await response.json();
-      // affiche les données récupéré
-      console.log(data);
+
+      // affiche les données récupérées
+      //console.log(data);
+      resolve(data);
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);
+      reject(error);
     }
-  }
-  fetchData();
+  });
 }
+
 
 
 //requete ajax
