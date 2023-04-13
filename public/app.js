@@ -59,49 +59,49 @@ async function rechercher() { //lance la recherche
   //récupération du terme de recherche
   terme_recherche = document.getElementById("champs_recherche").value;
 
+  console.log('terme_recherche: ' + terme_recherche);
+
   if (terme_recherche[0] === undefined) {
     document.getElementById("empty").textContent = "le champs de recherche est vide";
-  } 
-  else if (isIPAddress(terme_recherche)) {
-    console.log("C'est une adresse IP.");
   } else {
-    console.log("Ce n'est pas une adresse IP.");
-
-    console.log('terme_recherche: ' + terme_recherche);
-
     //aficher gif d'attente
     document.getElementById("bloc-gif-attente").style.display="block";
-    
-    //appel de la fonction pour rechercher l'entreprise 
-    await recherche_companie(terme_recherche);
-      
-    //affiche info de l'entreprise si une entreprise est trouvé
-    if (entreprises[0] === undefined) {
-      document.getElementById("empty").textContent = "Aucune entreprise trouvée";
-      console.log("Aucune entreprise trouvée");
+
+    if (isIPAddress(terme_recherche)) {
+      console.log("C'est une adresse IP.");
+      await recherche_shodan(terme_recherche);
     } else {
-      for (let i = 0; i < entreprises.length; i++) {
-        console.log("Liste entreprises:",entreprises[i])
-        latitude=entreprises[i].siege.latitude;
-        longitude=entreprises[i].siege.longitude;
-      } 
+      console.log("Ce n'est pas une adresse IP.");
 
-      const [dateAncienne, dateActuelle] = bonne_date();
-      //console.log("Date d'aujourd'hui :", dateActuelle);
-      //console.log("Il y a 120 jours :", dateAncienne);
+      //appel de la fonction pour rechercher l'entreprise 
+      await recherche_companie(terme_recherche);
+        
+      //affiche info de l'entreprise si une entreprise est trouvé
+      if (entreprises[0] === undefined) {
+        document.getElementById("empty").textContent = "Aucune entreprise trouvée";
+        console.log("Aucune entreprise trouvée");
+      } else {
+        for (let i = 0; i < entreprises.length; i++) {
+          console.log("Liste entreprises:",entreprises[i])
+          latitude=entreprises[i].siege.latitude;
+          longitude=entreprises[i].siege.longitude;
+        } 
 
-      //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 120 derniers jours
-      await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
+        const [dateAncienne, dateActuelle] = bonne_date();
+        //console.log("Date d'aujourd'hui :", dateActuelle);
+        //console.log("Il y a 120 jours :", dateAncienne);
 
-      //appel de la fonction pour rechercher des infos sur shodan
-      await recherche_shodan();
+        //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 120 derniers jours
+        await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
 
-      //appel de la fonction qui vérifie les favoris
-      await favoris();
-
-      //supprimer gif d'attente
-      document.getElementById("bloc-gif-attente").style.display="none";
+      }
     }
+
+    //appel de la fonction qui vérifie les favoris
+    await favoris();
+
+    //supprimer gif d'attente
+    document.getElementById("bloc-gif-attente").style.display="none";
   }
 }
 
@@ -153,10 +153,8 @@ async function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuel
   }
 }
 
-
-
 //
-async function recherche_shodan(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
+async function recherche_shodan(terme_recherche) { 
   console.log("------- TOP4 : recherche_shodan en cours -------");
   async function fetchData() {
     try {
