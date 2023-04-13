@@ -41,7 +41,7 @@ function bonne_date(){
   return [date120joursAvant, datejour];
 }
 
-function rechercher() { //lance la recherche
+async function rechercher() { //lance la recherche
   console.log("------- START : recherche en cours -------");
   terme_recherche = document.getElementById("champs_recherche").value;
 
@@ -51,39 +51,34 @@ function rechercher() { //lance la recherche
     console.log('terme_recherche: ' + terme_recherche);
     //aficher gif d'attente
     document.getElementById("bloc-gif-attente").style.display="block";
-    recherche_companie(terme_recherche)
-      .then(() => {
-        //affiche entreprises
-        //console.log("TOP")
-        for (let i = 0; i < entreprises.length; i++) {
-          //console.log("TOP2")
-          console.log("Liste entreprises:",entreprises[i])
-          latitude=entreprises[i].siege.latitude;
-          longitude=entreprises[i].siege.longitude;
-        } 
-        //console.log("TOP3")
-      })
-      .then(() => {
-        const [dateAncienne, dateActuelle] = bonne_date();
-        console.log("Date d'aujourd'hui :", dateActuelle);
-        console.log("Il y a 120 jours :", dateAncienne);
+    
+    await recherche_companie(terme_recherche);
+      
+    //affiche entreprises
+    for (let i = 0; i < entreprises.length; i++) {
+      console.log("Liste entreprises:",entreprises[i])
+      latitude=entreprises[i].siege.latitude;
+      longitude=entreprises[i].siege.longitude;
+    } 
 
-        rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
-      })
-      .then (() => {
-        recherche_shodan();
-      })
-      .then(() => {
-        favoris();
-      })
-      .catch(error => console.error(error));
+    const [dateAncienne, dateActuelle] = bonne_date();
+    //console.log("Date d'aujourd'hui :", dateActuelle);
+    //console.log("Il y a 120 jours :", dateAncienne);
+
+    await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
+
+    await recherche_shodan();
+
+    await favoris();
+
     //supprimer gif d'attente
     document.getElementById("bloc-gif-attente").style.display="none";
   }
 }
 
+
 //recherche entreprise
-function recherche_companie(terme_recherche) {
+async function recherche_companie(terme_recherche) {
   console.log("------- TOP1 : recherche_companie en cours -------");
   return new Promise((resolve, reject) => {
     fetch('https://recherche-entreprises.api.gouv.fr/search?q=' + terme_recherche)
@@ -100,36 +95,39 @@ function recherche_companie(terme_recherche) {
   });
 }
 
-function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuelle) {
+async function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuelle) {
   console.log("------- TOP3 : rechercher_vulnerabilites en cours -------");
 
-  console.log("Date d'aujourd'hui :", dateActuelle);
-  console.log("Il y a 120 jours :", dateAncienne);
+  //console.log("Date d'aujourd'hui :", dateActuelle);
+  //console.log("Il y a 120 jours :", dateAncienne);
 
   const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${dateAncienne}&pubEndDate=${dateActuelle}`;
   console.log("URL:", url);
 
   // Envoyer une requête à l'API NVD
-  fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      // Traiter les données de réponse
-      console.log(`Vulnérabilités pour l'entreprise ${nomEntreprise}:`);
-      if (data.vulnerabilities.length === 0) {
-        console.log("Aucune vulnérabilité trouvée.");
-      } else {
-        data.vulnerabilities.forEach(vulnerability => {
-          const cve = vulnerability.cve;
-          console.log(`${cve.id}: ${cve.descriptions[0].value}`);
-        });
-      }
-    })
-    .catch(error => console.error(error));
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Traiter les données de réponse
+    console.log(`Vulnérabilités pour l'entreprise ${nomEntreprise}:`);
+    if (data.vulnerabilities.length === 0) {
+      console.log("Aucune vulnérabilité trouvée.");
+    } else {
+      data.vulnerabilities.forEach(vulnerability => {
+        const cve = vulnerability.cve;
+        console.log(`${cve.id}: ${cve.descriptions[0].value}`);
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 
+
 //
-function recherche_shodan(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
+async function recherche_shodan(terme_recherche) { // Fonction pour récuperer uniquement les informations nécessaires
   console.log("------- TOP4 : recherche_shodan en cours -------");
   async function fetchData() {
     try {
