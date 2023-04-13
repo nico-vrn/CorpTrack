@@ -12,7 +12,7 @@ app.use(express.static('public'));
 
 app.get('/api/data/:search', async (req, res) => {
   const shodanKey = process.env.shodanKey;
-  console.log('API Key:', shodanKey)
+  //console.log('API Key:', shodanKey)
   const searchTerm = req.params.search;
   const data = await fetchExternalApi(shodanKey, searchTerm);
   res.json(data);
@@ -24,7 +24,7 @@ async function fetchExternalApi(apiKey, searchTerm) {
   console.log('API URL:', apiUrl)
   const response = await fetch(apiUrl);
   const textResponse = await response.text();
-  console.log('API Response:', textResponse);
+  //console.log('API Response:', textResponse);
   const data = JSON.parse(textResponse);
   return data;
 }
