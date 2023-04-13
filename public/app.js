@@ -54,12 +54,17 @@ async function rechercher() { //lance la recherche
     
     await recherche_companie(terme_recherche);
       
-    //affiche entreprises
-    for (let i = 0; i < entreprises.length; i++) {
-      console.log("Liste entreprises:",entreprises[i])
-      latitude=entreprises[i].siege.latitude;
-      longitude=entreprises[i].siege.longitude;
-    } 
+    //affiche info de l'entreprise
+    if (entreprises[0] === undefined) {
+      document.getElementById("empty").textContent = "Aucune entreprise trouvée";
+      console.log("Aucune entreprise trouvée");
+    } else {
+      for (let i = 0; i < entreprises.length; i++) {
+        console.log("Liste entreprises:",entreprises[i])
+        latitude=entreprises[i].siege.latitude;
+        longitude=entreprises[i].siege.longitude;
+      } 
+    }
 
     const [dateAncienne, dateActuelle] = bonne_date();
     //console.log("Date d'aujourd'hui :", dateActuelle);
