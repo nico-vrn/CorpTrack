@@ -73,12 +73,13 @@ async function rechercher() { //lance la recherche
 
       const shodanData = await recherche_shodan(terme_recherche);
       console.log("shodanData:", shodanData);
-      
+
       if (shodanData === undefined) {
         document.getElementById("empty").textContent = "Aucune entreprise trouvée";
         console.log("Aucune entreprise trouvée");
       } else {
         console.log("shodanData city:", shodanData.city);
+        afficher_resultat(null, shodanData, null);
       }
 
     } 
@@ -116,6 +117,7 @@ async function rechercher() { //lance la recherche
             console.log("Liste vulnérabilités:", vulnerabilities[i]);
           }
           console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
+          afficher_resultat(entreprises, null, vulnerabilities);
         }
       }
     }
@@ -125,6 +127,8 @@ async function rechercher() { //lance la recherche
 
     //supprimer gif d'attente
     document.getElementById("bloc-gif-attente").style.display="none";
+    
+    
   }
 }
 
@@ -193,6 +197,37 @@ async function recherche_shodan(terme_recherche) {
   });
 }
 
+function afficher_resultat(entreprises, shodanData, vulnerabilities) {
+  const blocResultats = document.getElementById("bloc-resultats");
+  blocResultats.innerHTML = "";
+
+  if (shodanData) {
+    const ipInfo = document.createElement("div");
+    ipInfo.innerHTML = `<h3>Informations Shodan</h3>
+                        <p><strong>Adresse IP :</strong> ${shodanData.ip_str}</p>
+                        <p><strong>Ville :</strong> ${shodanData.city}</p>
+                        <p><strong>Pays :</strong> ${shodanData.country_name}</p>`;
+    blocResultats.appendChild(ipInfo);
+  }
+
+  if (entreprises && entreprises.length > 0) {
+    const entrepriseInfo = document.createElement("div");
+    entrepriseInfo.innerHTML = `<h3>Informations sur l'entreprise</h3>
+                                 <p><strong>Nom :</strong> ${entreprises[0].denomination}</p>
+                                 <p><strong>Adresse :</strong> ${entreprises[0].siege.adresse}</p>
+                                 <p><strong>Code postal :</strong> ${entreprises[0].siege.code_postal}</p>`;
+    blocResultats.appendChild(entrepriseInfo);
+  }
+
+  if (vulnerabilities && vulnerabilities.length > 0) {
+    const vulnInfo = document.createElement("div");
+    vulnInfo.innerHTML = `<h3>Vulnérabilités trouvées (${vulnerabilities.length})</h3>`;
+    vulnerabilities.forEach((vulnerability, index) => {
+      vulnInfo.innerHTML += `<p><strong>${index + 1}. ${vulnerability.cve.id} :</strong> ${vulnerability.cve.descriptions[0].value}</p>`;
+    });
+    blocResultats.appendChild(vulnInfo);
+  }
+}
 
 
 //requete ajax
