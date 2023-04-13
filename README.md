@@ -72,6 +72,7 @@ Les contributions sont les bienvenues ! Pour contribuer, suivez les étapes suiv
 API utilisés :
 - API recherche d'entreprise [API gouv](https://api.gouv.fr/documentation/api-recherche-entreprises)
 - API shodan [API shodan](https://developer.shodan.io/api) 
+- API NVD [API NVD](https://nvd.nist.gov/developers/vulnerabilities)
 
 ## Auteurs
 
