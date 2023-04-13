@@ -16,7 +16,7 @@
   <h3 align="center">CorpTrack</h3>
 
   <p align="center">
-    Site d'information et de recherche de vulnérabilités sur les entreprises
+    Site d'information et de recherche de vulnérabilités sur les entreprises française 
     <br />
    </p>
 </div>
