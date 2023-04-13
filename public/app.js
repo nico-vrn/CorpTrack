@@ -1,5 +1,3 @@
-const shodanKey = ""
-
 var bt_search=document.getElementById("btn-lancer-recherche");
 bt_search.addEventListener("click",rechercher);
 ch_search=document.getElementById("champs_recherche");
@@ -9,6 +7,9 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
         rechercher();
 })
 var recherche=document.getElementById("champs_recherche").value="";
+let entreprises = [];
+let date120joursAvant
+let datejour
 
 son_ip() //récupération de l'IP
 function son_ip(){
@@ -27,36 +28,150 @@ function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de rech
   });
 }
 
-function rechercher(){ //fonction de recherche
-    console.log("recherche en cours");
-    recherche=document.getElementById("champs_recherche").value;
-    var url = "https://api.shodan.io/shodan/host/search?" + shodanKey + "&query=" + recherche + "&facets=country";
-    var url2="https://api.shodan.io/shodan/host/search?key=${shodanKey}&query=country:france&facets=country"
-    var url3="https://api.shodan.io/shodan/host/count?key=${shodanKey}&query=port:22&facets=org,os"; // fonctionne retourne le nb de host par pays
-    if(recherche[0]==undefined){ //si la recherche est vide
-      document.getElementById('empty').textContent="le champs de recherche est vide";
-    }
-    else{
-      async function fetchData() {
-        try {
-          console.log("fetch");
-          const response = await fetch('/api/data');
-          const data = await response.json();
-          
-          // Utilisez les données récupérées pour mettre à jour votre page
-          console.log(data);
-        } catch (error) {
-          console.error('Erreur lors de la récupération des données:', error);
-        }
-      }      
-      fetchData();
-      
-    }
-    favoris();
+//fonction qui sors la date du jour et la date d'il y a 120 jours au format ISO
+function bonne_date(){
+  console.log("------- TOP2 : bonne_date en cours -------")
+  const today = new Date();
+
+  const datejour = today.toISOString().replace(/Z$/, '');
+  console.log(datejour); // affiche la date d'aujourd'hui au format ISO 
+  
+  const date120joursAvant = new Date(today.setDate(today.getDate() - 120)).toISOString().replace(/Z$/, '');
+  console.log(date120joursAvant); // affiche la date d'il y a 120 jours au format ISO
+
+  return [date120joursAvant, datejour];
 }
 
-//requete ajax
+//fonction qui vérifie si l'entrée est une adresse IP
+function estUneIP(input) {
+  //vérification si l'entrée est une adresse IPv4 valide
+  const ipv4Pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
+  //vérification si l'entrée est une adresse IPv6 valide
+  const ipv6Pattern = /^((?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?!fe80:)[0-9a-fA-F]{1,4}:(:[0-9a-fA-F]{1,4}){1,6}|fe80:(:[0-9a-fA-F]{1,4}){1,6}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,4})$/;
+
+  return ipv4Pattern.test(input) || ipv6Pattern.test(input);
+}
+
+async function rechercher() { //lance la recherche
+  console.log("------- START : recherche en cours -------");
+
+  //récupération du terme de recherche
+  terme_recherche = document.getElementById("champs_recherche").value;
+
+  console.log('terme_recherche: ' + terme_recherche);
+
+  if (terme_recherche[0] === undefined) {
+    document.getElementById("empty").textContent = "le champs de recherche est vide";
+  } else {
+    //aficher gif d'attente
+    document.getElementById("bloc-gif-attente").style.display="block";
+
+    if (estUneIP(terme_recherche)) {
+      console.log("C'est une adresse IP.");
+      await recherche_shodan(terme_recherche);
+    } else {
+      console.log("Ce n'est pas une adresse IP.");
+
+      //appel de la fonction pour rechercher l'entreprise 
+      await recherche_companie(terme_recherche);
+        
+      //affiche info de l'entreprise si une entreprise est trouvé
+      if (entreprises[0] === undefined) {
+        document.getElementById("empty").textContent = "Aucune entreprise trouvée";
+        console.log("Aucune entreprise trouvée");
+      } else {
+        for (let i = 0; i < entreprises.length; i++) {
+          console.log("Liste entreprises:",entreprises[i])
+          latitude=entreprises[i].siege.latitude;
+          longitude=entreprises[i].siege.longitude;
+        } 
+
+        const [dateAncienne, dateActuelle] = bonne_date();
+        //console.log("Date d'aujourd'hui :", dateActuelle);
+        //console.log("Il y a 120 jours :", dateAncienne);
+
+        //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 120 derniers jours
+        await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
+
+      }
+    }
+
+    //appel de la fonction qui vérifie les favoris
+    await favoris();
+
+    //supprimer gif d'attente
+    document.getElementById("bloc-gif-attente").style.display="none";
+  }
+}
+
+
+//recherche entreprise
+async function recherche_companie(terme_recherche) {
+  console.log("------- TOP1 : recherche_companie en cours -------");
+  return new Promise((resolve, reject) => {
+    fetch('https://recherche-entreprises.api.gouv.fr/search?q=' + terme_recherche)
+      .then(response => response.json())
+      .then(data => {
+        entreprises = [];
+        for (let i = 0; i < 1; i++) {
+          entreprises.push(data.results[i]);
+        }
+        //console.log("entreprises:",entreprises);
+        resolve(entreprises);
+      })
+      .catch(error => reject(error));
+  });
+}
+
+async function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuelle) {
+  console.log("------- TOP3 : rechercher_vulnerabilites en cours -------");
+
+  //console.log("Date d'aujourd'hui :", dateActuelle);
+  //console.log("Il y a 120 jours :", dateAncienne);
+
+  const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${dateAncienne}&pubEndDate=${dateActuelle}`;
+  console.log("URL:", url);
+
+  // Envoyer une requête à l'API NVD
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Traiter les données de réponse
+    console.log(`Vulnérabilités pour l'entreprise ${nomEntreprise}:`);
+    if (data.vulnerabilities.length === 0) {
+      console.log("Aucune vulnérabilité trouvée.");
+    } else {
+      data.vulnerabilities.forEach(vulnerability => {
+        const cve = vulnerability.cve;
+        console.log(`${cve.id}: ${cve.descriptions[0].value}`);
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//
+async function recherche_shodan(terme_recherche) { 
+  console.log("------- TOP4 : recherche_shodan en cours -------");
+  async function fetchData() {
+    try {
+      console.log("shodan search");
+      const response = await fetch(`/api/data/${terme_recherche}`);
+      const data = await response.json();
+      // affiche les données récupéré
+      console.log(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données:", error);
+    }
+  }
+  fetchData();
+}
+
+
+//requete ajax
 function request(url, retour, autre){ //requete ajax
     //clean();
     document.getElementById("bloc-gif-attente").style.display="block";
@@ -287,7 +402,7 @@ function autocomplete(input, suggestions) {
 
 // Fonction pour gérer l'autocomplétion
 function gestion_autocomplete(event) {
-    //console.log('gestion_autocomplete');
+    //console.log('gestion autocomplete');
     const input = event.target;
     const searchTerm = input.value.toLowerCase();
     if (searchTerm === '') {

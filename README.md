@@ -67,6 +67,12 @@ Les contributions sont les bienvenues ! Pour contribuer, suivez les étapes suiv
 3. Faites vos modifications et soumettez-les avec un commit.
 4. Créez une pull request vers la branche `main` du dépôt d'origine.
 
+##Dependances:
+
+API utilisés :
+- API recherche d'entreprise [API gouv](https://api.gouv.fr/documentation/api-recherche-entreprises)
+- API shodan [API shodan](https://developer.shodan.io/api) 
+
 ## Auteurs
 
 - Lefranc Nicolas, [@nico-vrn](https://github.com/nico-vrn)
