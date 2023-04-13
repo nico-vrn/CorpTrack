@@ -84,6 +84,7 @@ async function rechercher() { //lance la recherche
         document.getElementById("empty").textContent = "Aucune entreprise trouvée";
         console.log("Aucune entreprise trouvée");
       } else {
+        console.log("Liste entreprises:",entreprises[0])
         /*for (let i = 0; i < entreprises.length; i++) {
           console.log("Liste entreprises:",entreprises[i])
           latitude=entreprises[i].siege.latitude;
@@ -101,9 +102,11 @@ async function rechercher() { //lance la recherche
           document.getElementById("empty").textContent = "Aucune vulnérabilité trouvée";
           console.log("Aucune vulnérabilité trouvée");
         } else {
+          let n=0;
           for (let i = 0; i < vulnerabilities.length; i++) {
             console.log("Liste vulnérabilités:", vulnerabilities[i]);
           }
+          console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
         }
       }
     }
