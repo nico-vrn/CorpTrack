@@ -8,7 +8,8 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
 })
 var recherche=document.getElementById("champs_recherche").value="";
 let entreprises = [];
-let date120joursAvant
+let vulnerabilities = [];
+let date30joursAvant
 let datejour
 
 son_ip() //récupération de l'IP
@@ -28,7 +29,7 @@ function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de rech
   });
 }
 
-//fonction qui sors la date du jour et la date d'il y a 120 jours au format ISO
+//fonction qui sors la date du jour et la date d'il y a 30 jours au format ISO
 function bonne_date(){
   console.log("------- TOP2 : bonne_date en cours -------")
   const today = new Date();
@@ -36,10 +37,10 @@ function bonne_date(){
   const datejour = today.toISOString().replace(/Z$/, '');
   console.log(datejour); // affiche la date d'aujourd'hui au format ISO 
   
-  const date120joursAvant = new Date(today.setDate(today.getDate() - 120)).toISOString().replace(/Z$/, '');
-  console.log(date120joursAvant); // affiche la date d'il y a 120 jours au format ISO
+  const date30joursAvant = new Date(today.setDate(today.getDate() - 30)).toISOString().replace(/Z$/, '');
+  console.log(date30joursAvant); // affiche la date d'il y a 30 jours au format ISO
 
-  return [date120joursAvant, datejour];
+  return [date30joursAvant, datejour];
 }
 
 //fonction qui vérifie si l'entrée est une adresse IP
@@ -69,8 +70,10 @@ async function rechercher() { //lance la recherche
 
     if (estUneIP(terme_recherche)) {
       console.log("C'est une adresse IP.");
+
       await recherche_shodan(terme_recherche);
-    } else {
+    } 
+    else {
       console.log("Ce n'est pas une adresse IP.");
 
       //appel de la fonction pour rechercher l'entreprise 
@@ -81,19 +84,27 @@ async function rechercher() { //lance la recherche
         document.getElementById("empty").textContent = "Aucune entreprise trouvée";
         console.log("Aucune entreprise trouvée");
       } else {
-        for (let i = 0; i < entreprises.length; i++) {
+        /*for (let i = 0; i < entreprises.length; i++) {
           console.log("Liste entreprises:",entreprises[i])
           latitude=entreprises[i].siege.latitude;
           longitude=entreprises[i].siege.longitude;
-        } 
+        } */
 
         const [dateAncienne, dateActuelle] = bonne_date();
         //console.log("Date d'aujourd'hui :", dateActuelle);
-        //console.log("Il y a 120 jours :", dateAncienne);
+        //console.log("Il y a 30 jours :", dateAncienne);
 
-        //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 120 derniers jours
+        //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 30 derniers jours
         await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
 
+        if (vulnerabilities[0] === undefined) {
+          document.getElementById("empty").textContent = "Aucune vulnérabilité trouvée";
+          console.log("Aucune vulnérabilité trouvée");
+        } else {
+          for (let i = 0; i < vulnerabilities.length; i++) {
+            console.log("Liste vulnérabilités:", vulnerabilities[i]);
+          }
+        }
       }
     }
 
@@ -117,7 +128,6 @@ async function recherche_companie(terme_recherche) {
         for (let i = 0; i < 1; i++) {
           entreprises.push(data.results[i]);
         }
-        //console.log("entreprises:",entreprises);
         resolve(entreprises);
       })
       .catch(error => reject(error));
@@ -127,31 +137,31 @@ async function recherche_companie(terme_recherche) {
 async function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuelle) {
   console.log("------- TOP3 : rechercher_vulnerabilites en cours -------");
 
-  //console.log("Date d'aujourd'hui :", dateActuelle);
-  //console.log("Il y a 120 jours :", dateAncienne);
-
   const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${dateAncienne}&pubEndDate=${dateActuelle}`;
   console.log("URL:", url);
 
-  // Envoyer une requête à l'API NVD
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
 
-    // Traiter les données de réponse
-    console.log(`Vulnérabilités pour l'entreprise ${nomEntreprise}:`);
-    if (data.vulnerabilities.length === 0) {
-      console.log("Aucune vulnérabilité trouvée.");
-    } else {
+      console.log(`Vulnérabilités pour l'entreprise ${nomEntreprise}:`);
+
       data.vulnerabilities.forEach(vulnerability => {
         const cve = vulnerability.cve;
-        console.log(`${cve.id}: ${cve.descriptions[0].value}`);
+        //console.log(`${cve.id}: ${cve.descriptions[0].value}`);
+        vulnerabilities.push(vulnerability);
       });
+
+      resolve(vulnerabilities);
+    } 
+    catch (error) {
+      console.error(error);
+      reject(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
+  });
 }
+
 
 //
 async function recherche_shodan(terme_recherche) { 
