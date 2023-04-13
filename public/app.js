@@ -28,6 +28,7 @@ function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de rech
   });
 }
 
+//fonction qui sors la date du jour et la date d'il y a 120 jours au format ISO
 function bonne_date(){
   console.log("------- TOP2 : bonne_date en cours -------")
   const today = new Date();
@@ -41,6 +42,17 @@ function bonne_date(){
   return [date120joursAvant, datejour];
 }
 
+//fonction qui vérifie si l'entrée est une adresse IP
+function isIPAddress(input) {
+  // Regex pour vérifier si l'entrée est une adresse IPv4 valide
+  const ipv4Pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+  // Regex pour vérifier si l'entrée est une adresse IPv6 valide
+  const ipv6Pattern = /^((?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?!fe80:)[0-9a-fA-F]{1,4}:(:[0-9a-fA-F]{1,4}){1,6}|fe80:(:[0-9a-fA-F]{1,4}){1,6}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,4})$/;
+
+  return ipv4Pattern.test(input) || ipv6Pattern.test(input);
+}
+
 async function rechercher() { //lance la recherche
   console.log("------- START : recherche en cours -------");
 
@@ -49,7 +61,12 @@ async function rechercher() { //lance la recherche
 
   if (terme_recherche[0] === undefined) {
     document.getElementById("empty").textContent = "le champs de recherche est vide";
+  } 
+  else if (isIPAddress(terme_recherche)) {
+    console.log("C'est une adresse IP.");
   } else {
+    console.log("Ce n'est pas une adresse IP.");
+
     console.log('terme_recherche: ' + terme_recherche);
 
     //aficher gif d'attente
