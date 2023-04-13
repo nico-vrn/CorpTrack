@@ -33,28 +33,32 @@ function bonne_date(){
   const today = new Date();
 
   const datejour = today.toISOString().replace(/Z$/, '');
-  console.log(datejour); // affiche la date d'aujourd'hui au format ISO : "2021-05-26T00:00:00.000Z" (le Z indique le fuseau horaire UTC)
+  console.log(datejour); // affiche la date d'aujourd'hui au format ISO 
   
   const date120joursAvant = new Date(today.setDate(today.getDate() - 120)).toISOString().replace(/Z$/, '');
-  console.log(date120joursAvant); // affiche la date d'il y a 120 jours au format ISO : "2021-04-06T00:00:00.000Z"
+  console.log(date120joursAvant); // affiche la date d'il y a 120 jours au format ISO
 
   return [date120joursAvant, datejour];
 }
 
 async function rechercher() { //lance la recherche
   console.log("------- START : recherche en cours -------");
+
+  //récupération du terme de recherche
   terme_recherche = document.getElementById("champs_recherche").value;
 
   if (terme_recherche[0] === undefined) {
     document.getElementById("empty").textContent = "le champs de recherche est vide";
   } else {
     console.log('terme_recherche: ' + terme_recherche);
+
     //aficher gif d'attente
     document.getElementById("bloc-gif-attente").style.display="block";
     
+    //appel de la fonction pour rechercher l'entreprise 
     await recherche_companie(terme_recherche);
       
-    //affiche info de l'entreprise
+    //affiche info de l'entreprise si une entreprise est trouvé
     if (entreprises[0] === undefined) {
       document.getElementById("empty").textContent = "Aucune entreprise trouvée";
       console.log("Aucune entreprise trouvée");
@@ -64,20 +68,23 @@ async function rechercher() { //lance la recherche
         latitude=entreprises[i].siege.latitude;
         longitude=entreprises[i].siege.longitude;
       } 
+
+      const [dateAncienne, dateActuelle] = bonne_date();
+      //console.log("Date d'aujourd'hui :", dateActuelle);
+      //console.log("Il y a 120 jours :", dateAncienne);
+
+      //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 120 derniers jours
+      await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
+
+      //appel de la fonction pour rechercher des infos sur shodan
+      await recherche_shodan();
+
+      //appel de la fonction qui vérifie les favoris
+      await favoris();
+
+      //supprimer gif d'attente
+      document.getElementById("bloc-gif-attente").style.display="none";
     }
-
-    const [dateAncienne, dateActuelle] = bonne_date();
-    //console.log("Date d'aujourd'hui :", dateActuelle);
-    //console.log("Il y a 120 jours :", dateAncienne);
-
-    await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
-
-    await recherche_shodan();
-
-    await favoris();
-
-    //supprimer gif d'attente
-    document.getElementById("bloc-gif-attente").style.display="none";
   }
 }
 
