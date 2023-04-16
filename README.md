@@ -10,13 +10,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/nico-vrn/CorpTrack">
-    <img src="images/logo_corptrack.png" alt="Logo" width="150" height="120">
+    <img src="public/images/logo_corptrack.png" alt="Logo" width="150" height="120">
   </a>
 
   <h3 align="center">CorpTrack</h3>
 
   <p align="center">
-    Site d'information et de recherche de vulnérabilités sur les entreprises
+    Site d'information et de recherche de vulnérabilités sur les entreprises française 
     <br />
    </p>
 </div>
@@ -67,6 +67,13 @@ Les contributions sont les bienvenues ! Pour contribuer, suivez les étapes suiv
 3. Faites vos modifications et soumettez-les avec un commit.
 4. Créez une pull request vers la branche `main` du dépôt d'origine.
 
+##Dependances:
+
+API utilisés :
+- [API recherche d'entreprise française](https://api.gouv.fr/documentation/api-recherche-entreprises)
+- [API shodan](https://developer.shodan.io/api) 
+- [API NVD](https://nvd.nist.gov/developers/vulnerabilities)
+
 ## Auteurs
 
 - Lefranc Nicolas, [@nico-vrn](https://github.com/nico-vrn)
@@ -80,11 +87,11 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/YuToutCourt/KeyLogger_USB?style=for-the-badge
-[contributors-url]: https://github.com/YuToutCourt/KeyLogger_USB/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/YuToutCourt/KeyLogger_USB.svg?style=for-the-badge
-[forks-url]: https://github.com/YuToutCourt/KeyLogger_USB/network/members
-[stars-shield]: https://img.shields.io/github/stars/YuToutCourt/KeyLogger_USB.svg?style=for-the-badge
-[stars-url]: https://github.com/YuToutCourt/KeyLogger_USB/stargazers
-[issues-shield]: https://img.shields.io/github/issues/YuToutCourt/KeyLogger_USB.svg?style=for-the-badge
-[issues-url]: https://github.com/YuToutCourt/KeyLogger_USB/issues
+[contributors-shield]: https://img.shields.io/github/contributors/nico-vrn/CorpTrack?style=for-the-badge
+[contributors-url]: https://github.com/nico-vrn/CorpTrack/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/nico-vrn/CorpTrack.svg?style=for-the-badge
+[forks-url]: https://github.com/nico-vrn/CorpTrack/network/members
+[stars-shield]: https://img.shields.io/github/stars/nico-vrn/CorpTrack.svg?style=for-the-badge
+[stars-url]: https://github.com/nico-vrn/CorpTrack/stargazers
+[issues-shield]: https://img.shields.io/github/issues/nico-vrn/CorpTrack.svg?style=for-the-badge
+[issues-url]: https://github.com/nico-vrn/CorpTrack/issues

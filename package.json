@@ -2,9 +2,10 @@
   "name": "corptrack",
   "version": "1.0.0",
   "description": "Site d'information et de recherche de vulnérabilités sur les entreprises",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,6 +25,8 @@
   },
   "homepage": "https://github.com/nico-vrn/CorpTrack#readme",
   "dependencies": {
-    "express": "^4.18.2"
-  }
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.1"
+  }  
 }
