@@ -221,10 +221,6 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
 
   if (entreprises && entreprises.length > 0) {
     const entrepriseInfo = document.createElement("div");
-    entrepriseInfo.innerHTML = `<h3>Informations sur l'entreprise</h3>
-                                 <p><strong>Nom :</strong> ${entreprises[0].denomination}</p>
-                                 <p><strong>Adresse :</strong> ${entreprises[0].siege.adresse}</p>
-                                 <p><strong>Code postal :</strong> ${entreprises[0].siege.code_postal}</p>`;
     entrepriseInfo.innerHTML = `<u><h3>Informations sur l'entreprise</h3></u>
                                  <p><strong>Nom :</strong> ${entreprises[0].nom_complet}</p>
                                  <p><strong>Adresse :</strong> ${entreprises[0].siege.adresse}</p>
@@ -238,7 +234,6 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
 
   if (vulnerabilities && vulnerabilities.length > 0) {
     const vulnInfo = document.createElement("div");
-    vulnInfo.innerHTML = `<h3>Vulnérabilités trouvées (${vulnerabilities.length})</h3>`;
     vulnInfo.innerHTML = `<u><h3>Vulnérabilités trouvées (${vulnerabilities.length})</h3><u/>`;
     vulnerabilities.forEach((vulnerability, index) => {
       vulnInfo.innerHTML += `<p><strong>${index + 1}. ${vulnerability.cve.id} :</strong> ${vulnerability.cve.descriptions[0].value}</p>`;
