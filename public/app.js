@@ -217,7 +217,19 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
                         <p><strong>Adresse IP :</strong> ${shodanData.ip_str}</p>
                         <p><strong>Ville :</strong> ${shodanData.city}</p>
                         <p><strong>Pays :</strong> ${shodanData.country_name}</p>`;
+                        //ports ouverts
+    const ports = document.createElement("div");
+    ports.innerHTML = `<h3>Ports ouverts</h3>`;
+    const listePorts = document.createElement("ul");
+    shodanData.ports.forEach(port => {
+      console.log("port:",port)
+      const portItem = document.createElement("li");
+      portItem.textContent = port;
+      listePorts.appendChild(portItem);
+    });
     blocResultats.appendChild(ipInfo);
+    blocResultats.appendChild(ports);
+    blocResultats.appendChild(listePorts);
     latitude=shodanData.latitude;
     longitude=shodanData.longitude;
   }
