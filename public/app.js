@@ -5,6 +5,7 @@ document.getElementById("btn-lancer-recherche").addEventListener("click",recherc
 const blocResultats = document.getElementById("bloc-resultats");
 const recherche=document.getElementById("champs_recherche");
 const erreur=document.getElementById("erreur");
+const etoile_fav=document.getElementById("btn-favoris");
 ch_search=document.getElementById("champs_recherche");
 
 //permet de lancer la recherche avec la touche entrée + vide le champs de recherche + focus sur le champs de recherche
@@ -350,34 +351,36 @@ function initMap(lat,lon) { //fonction d'initialisation de la carte
 //gestion des favoris
 
 favoris();
-document.addEventListener('keyup', function(e) {favoris();});
+document.addEventListener('keyup', function(e) {favoris();}); //si on appuie sur une touche du clavier
 
-function favoris(){ //gestion des favoris
-  if(localStorage.fav==undefined){ //si pas de localStorage
+//fonction de gestion des favoris
+function favoris(){
+  if(localStorage.fav==undefined){ //si pas de localStorage favoris on le crée
     localStorage.fav=JSON.stringify({favoris:[]});
   }
-  var loupe=document.getElementById("btn-favoris");
+
   var fav=recup_fav();
   var elmt_fav=fav.favoris;
+
   if (elmt_fav.length==0){ //si pas de favoris
     etoile("vide");
-    loupe.addEventListener("click",ajouter_fav);
+    etoile_fav.addEventListener("click",ajouter_fav);
     return;
   }
   else{ //si des favoris
     for (var i=0;i<fav.favoris.length;i++){
-      if (elmt_fav[i]==document.getElementById("champs_recherche").value){ //si le champ de recherche est déjà dans les favoris
+      if (elmt_fav[i]==ch_search.value){ //si le champ de recherche est déjà dans les favoris
         etoile("pleine");
-        loupe.removeEventListener("click",ajouter_fav);
-        loupe.addEventListener("click",function(){
+        etoile_fav.removeEventListener("click",ajouter_fav);
+        etoile_fav.addEventListener("click",function(){
           supprimer_fav("etoile");
         });
         return;
       }
       else{ //si le champ de recherche n'est pas dans les favoris
         etoile("vide");
-        loupe.removeEventListener("click",supprimer_fav);
-        loupe.addEventListener("click",ajouter_fav);
+        etoile_fav.removeEventListener("click",supprimer_fav);
+        etoile_fav.addEventListener("click",ajouter_fav);
       }
     }
   }
@@ -389,25 +392,24 @@ function recup_fav(){ //recupère les favoris
 }
 
 function etoile(cote){  //affiche les étoiles
-  var loupe=document.getElementById("btn-favoris");
-  var img_pleine=document.getElementById("img-pleine");
-  var img_vide=document.getElementById("img-vide");
-  if(cote=="pleine"){ //si pleine
-    img_pleine.style.display="block";
-    img_vide.style.display="none";
-    loupe.style.backgroundColor="var(--main-green)";
-    loupe.style.border=".1em solid grey"
+  var img_etoile_pleine=document.getElementById("img-pleine");
+  var img_etoile_vide=document.getElementById("img-vide");
+  if(cote=="pleine"){ //si l'étoile est pleine
+    img_etoile_pleine.style.display="block";
+    img_etoile_vide.style.display="none";
+    etoile_fav.style.backgroundColor="var(--main-green)";
+    etoile_fav.style.border=".1em solid grey"
   }
-  else{   //si vide
-    loupe.style.backgroundColor="grey";
-    img_pleine.style.display="none";
-    img_vide.style.display="block";
+  else{   //si l'étoiile est vide
+    etoile_fav.style.backgroundColor="grey"; 
+    img_etoile_pleine.style.display="none";
+    img_etoile_vide.style.display="block";
   }
 }
 
 function ajouter_fav(){ //ajoute un favoris
-  recherche=document.getElementById("champs_recherche").value
-  if(recherche==""){ //si champs de recherche vide
+  //console.log("champs recherche=",ch_search.value);
+  if(ch_search.value==""){ //si champs de recherche vide
     vider_resultat();
     const rien_favoris = document.createElement("p");
     rien_favoris.innerHTML = "Vous ne pouvez pas ajouter rien aux favoris";
@@ -415,7 +417,7 @@ function ajouter_fav(){ //ajoute un favoris
   }
   else{ //si champs de recherche rempli
     var fav=recup_fav();
-    fav.favoris.push(recherche);
+    fav.favoris.push(ch_search.value);
     localStorage.fav=JSON.stringify(fav);
     favoris();
     affiche_fav();
@@ -428,7 +430,7 @@ function supprimer_fav(cmt){ //supprime un favoris
   var elmt_fav=fav.favoris;
   favoris();
   if (cmt=="etoile"){ //si clic sur étoile
-    var elmt_fav_supp=document.getElementById("champs_recherche").value;
+    var elmt_fav_supp=ch_search.value;
   }
   else{ //si clic sur le bouton supprimer
     var elmt_fav_supp=cmt;
@@ -469,7 +471,7 @@ function affiche_fav(){ //affiche les favoris
       newA=document.createElement("a");
       newA.textContent=fav.favoris[i];
       newA.addEventListener("click",function(){
-        document.getElementById("champs_recherche").value=this.textContent;
+        ch_search.value=this.textContent;
         rechercher();
       });
       var img_croix=document.createElement("img");
