@@ -32,6 +32,7 @@ var map = null;
 let entreprises = [];
 let companies_autocompletion = [];
 let vulnerabilities = [];
+let shodanData = [];
 let date30joursAvant
 let datejour
 
@@ -95,6 +96,7 @@ function vider_resultat(){
   entreprises = [];
   companies_autocompletion = [];
   vulnerabilities = [];
+  shodanData = [];
 }
 
 //fonction qui lance les recherches
@@ -115,11 +117,13 @@ async function rechercher() {
     //aficher gif d'attente
     document.getElementById("bloc-gif-attente").style.display="block";
 
+    const [dateAncienne, dateActuelle] = bonne_date();
+
     //vérification si l'entrée est une adresse IP
     if (estUneIP(terme_recherche)) {
       console.log("C'est une adresse IP.");
 
-      const shodanData = await recherche_shodan(terme_recherche); //appel de la fonction pour rechercher l'IP
+      await recherche_shodan(terme_recherche); //appel de la fonction pour rechercher l'IP
       console.log("shodanData:", shodanData);
 
       //affiche info de l'IP si une IP est trouvé sinon affiche "Aucune entreprise ou IP trouvée"
@@ -127,9 +131,11 @@ async function rechercher() {
         erreur.appendChild(document.createTextNode("Aucune entreprise ou IP trouvée"));
         console.log("Aucune valeurs reconnus");
       } else {
-        afficher_resultat(null, shodanData, null);
+        var nom_societe=shodanData.org;
+        nom_societe=nom_societe.split(" ")[0];
+        console.log("nom_societe:",nom_societe)
+        terme_recherche=nom_societe; //récupère le nom de l'entreprise
       }
-
     } 
     else { //si ce n'est pas une adresse IP
       console.log("Ce n'est pas une adresse IP.");
@@ -146,30 +152,28 @@ async function rechercher() {
         /*for (let i = 0; i < entreprises.length; i++) {
           console.log("Liste entreprises:",entreprises[i])
         } */
-
-        const [dateAncienne, dateActuelle] = bonne_date();
-        //console.log("Date d'aujourd'hui :", dateActuelle);
-        //console.log("Il y a 30 jours :", dateAncienne);
-
-        //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 30 derniers jours
-        await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
-
-        //affiche les vulnérabilités si il y en a sinon affiche erreur
-        if (vulnerabilities[0] === undefined) {
-          console.log("Aucune vulnérabilité trouvée");
-          const vulnInfo = document.createElement("p");
-          vulnInfo.innerHTML = "/!\\ Aucune vulnérabilité trouvée ou entreprise indéfinie /!\\";
-          erreur.appendChild(vulnInfo);
-        } else {
-          let n=0;
-          for (let i = 0; i < vulnerabilities.length; i++) { //affiche les vulnérabilités (pour debeug)
-            //console.log("Liste vulnérabilités:", vulnerabilities[i]);
-          }
-          console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
-        }
-        afficher_resultat(entreprises, null, vulnerabilities); //appel la fonction pour afficher les résultats et transmet les données récupérées
       }
     }
+
+    //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 30 derniers jours
+    await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
+
+    //affiche les vulnérabilités si il y en a sinon affiche erreur
+    if (vulnerabilities[0] === undefined) {
+      console.log("Aucune vulnérabilité trouvée");
+      const vulnInfo = document.createElement("p");
+      vulnInfo.innerHTML = "/!\\ Aucune vulnérabilité trouvée ou entreprise indéfinie /!\\";
+      erreur.appendChild(vulnInfo);
+    } else {
+      let n=0;
+      for (let i = 0; i < vulnerabilities.length; i++) { //affiche les vulnérabilités (pour debeug)
+        //console.log("Liste vulnérabilités:", vulnerabilities[i]);
+      }
+      console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
+    }
+
+    //appel de la fonction qui affiche les résultats
+    await afficher_resultat();
 
     //appel de la fonction qui gère les favoris
     await favoris();
@@ -232,14 +236,15 @@ async function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuel
 async function recherche_shodan(terme_recherche) {
   console.log("------- TOP4 : recherche_shodan en cours -------");
 
-  return new Promise(async (resolve, reject) => { //récupération des données et stockage dans un tableau "shodanData"
+  return new Promise(async (resolve, reject) => {
     try {
-      const response = await fetch(`/api/data/${terme_recherche}`); //appel de l'API via le serveur pour cacher la clé API
+      const response = await fetch(`/api/data/${terme_recherche}`);
       const data = await response.json();
 
-      //affiche les données récupérées
-      //console.log(data);
-      resolve(data);
+      // Stocke les données récupérées dans la variable globale shodanData
+      shodanData = data;
+
+      resolve(shodanData);
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);
       reject(error);
@@ -247,12 +252,13 @@ async function recherche_shodan(terme_recherche) {
   });
 }
 
+
 //fonction qui va afficher les résultats des recherches
-function afficher_resultat(entreprises, shodanData, vulnerabilities) {
+function afficher_resultat(definition) {
   console.log("------- TOP5 : afficher_resultat en cours -------");
 
   //si les données viennent de Shodan
-  if (shodanData) {
+  if (shodanData && shodanData.length > 0) {
     const ipInfo = document.createElement("div");
 
     //selectionne les informations choisies de l'IP 
