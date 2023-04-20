@@ -319,9 +319,9 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
   if (vulnerabilities && vulnerabilities.length > 0) {
     const vulnInfo = document.createElement("div");
 
-    //selectionne le nombre de vulnérabilités trouvées
-    vulnInfo.innerHTML = `<h3>Vulnérabilités trouvées (${vulnerabilities.length}) :</h3>`;
-    vulnInfo.innerHTML= `<p>Vous pouvez consulter les détails de chaque vulnérabilité en cliquant sur son nom dans la liste.</p>`;
+    vulnInfo.innerHTML= `<h3>Vulnérabilités trouvées (${vulnerabilities.length}) :</h3>
+                        <p>Vous pouvez consulter les détails de chaque vulnérabilité en cliquant sur son nom dans la liste.</p>`;
+
 
     //Crée un élément <select>
     const select = document.createElement("select");
@@ -346,8 +346,8 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
     });
 
     //affiche les résultats
+    vulnInfo.appendChild(select);
     blocResultats.appendChild(vulnInfo);
-    blocResultats.appendChild(select);
   }
   
   //debeug
