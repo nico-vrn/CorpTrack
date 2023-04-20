@@ -36,10 +36,10 @@ function bonne_date(){
   const today = new Date();
 
   const datejour = today.toISOString().replace(/Z$/, '');
-  console.log(datejour); // affiche la date d'aujourd'hui au format ISO 
+  console.log("date du jour : ", datejour); // affiche la date d'aujourd'hui au format ISO 
   
   const date30joursAvant = new Date(today.setDate(today.getDate() - 30)).toISOString().replace(/Z$/, '');
-  console.log(date30joursAvant); // affiche la date d'il y a 30 jours au format ISO
+  console.log("date 30 jours avant :", date30joursAvant); // affiche la date d'il y a 30 jours au format ISO
 
   return [date30joursAvant, datejour];
 }
@@ -105,23 +105,18 @@ async function rechercher() { //lance la recherche
         console.log("Aucune entreprise trouvée");
       } else {
         console.log("Liste entreprises:",entreprises[0])
-        for (let i = 0; i < entreprises.length; i++) {
+        /*for (let i = 0; i < entreprises.length; i++) {
           console.log("Liste entreprises:",entreprises[i])
-          latitude=entreprises[i].siege.latitude;
-          longitude=entreprises[i].siege.longitude;
-          console.log("latitude:",latitude);
-          console.log("longitude:",longitude);
-        } 
+        } */
 
         const [dateAncienne, dateActuelle] = bonne_date();
         //console.log("Date d'aujourd'hui :", dateActuelle);
         //console.log("Il y a 30 jours :", dateAncienne);
 
         //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 30 derniers jours
-        await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
+        //await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
 
         if (vulnerabilities[0] === undefined) {
-          document.getElementById("bloc-resultats").textContent = "Aucune vulnérabilité trouvée";
           console.log("Aucune vulnérabilité trouvée");
         } else {
           let n=0;
@@ -129,8 +124,8 @@ async function rechercher() { //lance la recherche
             //console.log("Liste vulnérabilités:", vulnerabilities[i]);
           }
           console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
-          afficher_resultat(entreprises, null, vulnerabilities);
         }
+        afficher_resultat(entreprises, null, vulnerabilities);
       }
     }
 
@@ -251,7 +246,7 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
   if (entreprises && entreprises.length > 0) {
     const entrepriseInfo = document.createElement("div");
     entrepriseInfo.innerHTML = `<h3>Informations sur l'entreprise</h3>
-                                 <p><strong>Nom :</strong> ${entreprises[0].denomination}</p>
+                                 <p><strong>Nom :</strong> ${entreprises[0].nom_raison_sociale}</p>
                                  <p><strong>Adresse :</strong> ${entreprises[0].siege.adresse}</p>
                                  <p><strong>Code postal :</strong> ${entreprises[0].siege.code_postal}</p>`;
     blocResultats.appendChild(entrepriseInfo);
@@ -266,6 +261,9 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
       vulnInfo.innerHTML += `<p><strong>${index + 1}. ${vulnerability.cve.id} :</strong> ${vulnerability.cve.descriptions[0].value}</p>`;
     });
     blocResultats.appendChild(vulnInfo);
+  }
+  else {
+    document.getElementById("empty").textContent = "/!\\ Aucune vulnérabilité trouvée";
   }
 
   console.log("Latitude:", latitude, "Longitude:", longitude);
