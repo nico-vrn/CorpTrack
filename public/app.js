@@ -7,7 +7,8 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
         rechercher();
 })
 const blocResultats = document.getElementById("bloc-resultats");
-var recherche=document.getElementById("champs_recherche").value="";
+var recherche=document.getElementById("champs_recherche");
+var erreur=document.getElementById("erreur");
 let entreprises = [];
 let vulnerabilities = [];
 let date30joursAvant
@@ -58,6 +59,7 @@ function estUneIP(input) {
 //fonction qui vide le bloc de résultat et la map
 function vider_resultat(){
   blocResultats.innerHTML="";
+  erreur.innerHTML="";
   document.getElementById("map").style.display="none";
   document.getElementById("text_map").style.display="none";
 }
@@ -263,13 +265,23 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
     blocResultats.appendChild(vulnInfo);
   }
   else {
-    document.getElementById("empty").textContent = "/!\\ Aucune vulnérabilité trouvée";
+    const vulnInfo = document.createElement("p");
+    vulnInfo.innerHTML = "/!\\ Aucune vulnérabilité trouvée";
+    erreur.appendChild(vulnInfo);
   }
 
   console.log("Latitude:", latitude, "Longitude:", longitude);
-  initMap(latitude, longitude);
-  document.getElementById("map").style.display="block";
-  document.getElementById("text_map").style.display="block";
+
+  if (latitude && longitude) {
+    initMap(latitude, longitude);
+    document.getElementById("map").style.display="block";
+    document.getElementById("text_map").style.display="block";
+  }
+  else {
+    const mapInfo = document.createElement("p");
+    mapInfo.innerHTML = "/!\\ Aucune position géographique trouvée";
+    erreur.appendChild(mapInfo);
+  }
 }
 
 
@@ -382,14 +394,14 @@ function etoile(cote){  //affiche les étoiles
 }
 
 function ajouter_fav(){ //ajoute un favoris
-  recherche=document.getElementById("champs_recherche").value;
-  empty=document.getElementById('empty');
+  recherche=document.getElementById("champs_recherche").value
   if(recherche==""){ //si champs de recherche vide
-    vider_resultats();
-    empty.textContent="Vous ne pouvez pas ajouter rien au favoris";
+    vider_resultat();
+    const rien_favoris = document.createElement("p");
+    rien_favoris.innerHTML = "Vous ne pouvez pas ajouter rien aux favoris";
+    erreur.appendChild(rien_favoris);
   }
   else{ //si champs de recherche rempli
-    empty.textContent="";
     var fav=recup_fav();
     fav.favoris.push(recherche);
     localStorage.fav=JSON.stringify(fav);
