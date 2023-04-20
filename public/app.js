@@ -6,6 +6,7 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
     if(event.keyCode==13)
         rechercher();
 })
+ch_search.value=""; //vide le champs de recherche
 const blocResultats = document.getElementById("bloc-resultats");
 var recherche=document.getElementById("champs_recherche");
 var erreur=document.getElementById("erreur");
