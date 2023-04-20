@@ -86,12 +86,15 @@ function estUneIP(input) {
   return ipv4Pattern.test(input) || ipv6Pattern.test(input);
 }
 
-//fonction qui vide le bloc de résultat, le bloc d'erreur et la map
+//fonction qui vide le bloc de résultat, le bloc d'erreur la map et les tableaux
 function vider_resultat(){
   blocResultats.innerHTML="";
   erreur.innerHTML="";
   document.getElementById("map").style.display="none";
   document.getElementById("text_map").style.display="none";
+  entreprises = [];
+  companies_autocompletion = [];
+  vulnerabilities = [];
 }
 
 //fonction qui lance les recherches
