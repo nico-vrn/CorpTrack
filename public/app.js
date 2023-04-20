@@ -152,7 +152,7 @@ async function rechercher() {
         //console.log("Il y a 30 jours :", dateAncienne);
 
         //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 30 derniers jours
-        //await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
+        await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
 
         //affiche les vulnérabilités si il y en a sinon affiche erreur
         if (vulnerabilities[0] === undefined) {
