@@ -64,7 +64,7 @@ function afficher_IP(data){
 
 //fonction qui sors la date du jour et la date d'il y a 30 jours au format ISO
 function bonne_date(){
-  console.log("------- TOP2 : bonne_date en cours -------")
+  console.log("------- TOP1 : bonne_date en cours -------")
   const today = new Date();
 
   const datejour = today.toISOString().replace(/Z$/, '');
@@ -78,6 +78,8 @@ function bonne_date(){
 
 //fonction qui vérifie si l'entrée est une adresse IP
 function estUneIP(input) {
+  console.log("------- TOP2 : estUneIp en cours -------")
+
   //vérification si l'entrée est une adresse IPv4 valide
   const ipv4Pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
@@ -185,7 +187,7 @@ async function rechercher() {
 
 //fonction qui appel l'API pour rechercher l'enreprise et récupérer les données
 async function recherche_companie(terme_recherche) {
-  console.log("------- TOP1 : recherche_companie en cours -------");
+  console.log("------- TOP3 : recherche_companie en cours -------");
 
   return new Promise((resolve, reject) => {
     fetch('https://recherche-entreprises.api.gouv.fr/search?q=' + terme_recherche)
@@ -203,7 +205,7 @@ async function recherche_companie(terme_recherche) {
 
 //fonction qui va rechercher si des vulnérabilités ont été détectées sur l'entreprise
 async function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuelle) {
-  console.log("------- TOP3 : rechercher_vulnerabilites en cours -------");
+  console.log("------- TOP4 : rechercher_vulnerabilites en cours -------");
 
   //configure l'URL avec le nom de l'entreprise et les dates que l'on veut pour la recherche (30 derniers jours)
   const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${nomEntreprise}&pubStartDate=${dateAncienne}&pubEndDate=${dateActuelle}`;
@@ -234,7 +236,7 @@ async function rechercher_vulnerabilites(nomEntreprise, dateAncienne, dateActuel
 
 //fonction qui va rechercher les informations de l'IP sur Shodan
 async function recherche_shodan(terme_recherche) {
-  console.log("------- TOP4 : recherche_shodan en cours -------");
+  console.log("------- TOP3 : recherche_shodan en cours -------");
 
   return new Promise(async (resolve, reject) => {
     try {
@@ -258,7 +260,9 @@ function afficher_resultat(definition) {
   console.log("------- TOP5 : afficher_resultat en cours -------");
 
   //si les données viennent de Shodan
-  if (shodanData && shodanData.length > 0) {
+  //console.log("shodanData:", Object.keys(shodanData).length)
+  if (Object.keys(shodanData).length > 0) {
+    //console.log("Données venant de Shodan");
     const ipInfo = document.createElement("div");
 
     //selectionne les informations choisies de l'IP 
