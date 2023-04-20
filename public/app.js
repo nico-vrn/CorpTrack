@@ -85,10 +85,10 @@ async function rechercher() { //lance la recherche
       console.log("shodanData:", shodanData);
 
       if (shodanData === undefined) {
-        document.getElementById("bloc-resultats").textContent = "Aucune entreprise trouvée";
-        console.log("Aucune entreprise trouvée");
+        document.getElementById("bloc-resultats").textContent = "Aucune entreprise ou IP trouvée";
+        console.log("Aucune valeurs reconnus");
       } else {
-        console.log("shodanData city:", shodanData.city);
+        //console.log("shodanData city:", shodanData.city);
         afficher_resultat(null, shodanData, null);
       }
 
@@ -213,21 +213,34 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
 
   if (shodanData) {
     const ipInfo = document.createElement("div");
-    ipInfo.innerHTML = `<h3>Informations Shodan</h3>
+    ipInfo.innerHTML = `<h3>Informations venant de Shodan :</h3>
                         <p><strong>Adresse IP :</strong> ${shodanData.ip_str}</p>
                         <p><strong>Ville :</strong> ${shodanData.city}</p>
-                        <p><strong>Pays :</strong> ${shodanData.country_name}</p>`;
-                        //ports ouverts
+                        <p><strong>Pays :</strong> ${shodanData.country_name}</p>
+                        <p><strong>OS :</strong> ${shodanData.os}</p>`;
+    //domaines associés
+    const domaines = document.createElement("div");
+    domaines.innerHTML = `<h3>Domaines associés :</h3>`;
+    const listeDomaines = document.createElement("ul");
+    shodanData.domains.forEach(domaine => {
+      //console.log("domaine:",domaine)
+      const domaineItem = document.createElement("li");
+      domaineItem.textContent = domaine;
+      listeDomaines.appendChild(domaineItem);
+    });
+    //ports ouverts
     const ports = document.createElement("div");
-    ports.innerHTML = `<h3>Ports ouverts</h3>`;
+    ports.innerHTML = `<h3>Ports ouverts :</h3>`;
     const listePorts = document.createElement("ul");
     shodanData.ports.forEach(port => {
-      console.log("port:",port)
+      //console.log("port:",port)
       const portItem = document.createElement("li");
       portItem.textContent = port;
       listePorts.appendChild(portItem);
     });
     blocResultats.appendChild(ipInfo);
+    blocResultats.appendChild(domaines);
+    blocResultats.appendChild(listeDomaines);
     blocResultats.appendChild(ports);
     blocResultats.appendChild(listePorts);
     latitude=shodanData.latitude;
