@@ -215,9 +215,10 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
     const ipInfo = document.createElement("div");
     ipInfo.innerHTML = `<h3>Informations venant de Shodan :</h3>
                         <p><strong>Adresse IP :</strong> ${shodanData.ip_str}</p>
-                        <p><strong>Ville :</strong> ${shodanData.city}</p>
-                        <p><strong>Pays :</strong> ${shodanData.country_name}</p>
-                        <p><strong>OS :</strong> ${shodanData.os}</p>`;
+                        <p><strong>Ville :</strong> ${shodanData.city} (${shodanData.region_code})</p>
+                        <p><strong>Pays :</strong> ${shodanData.country_name} (${shodanData.country_code})</p>
+                        <p><strong>OS :</strong> ${shodanData.os}</p>
+                        <p><strong>code ASN :</strong> ${shodanData.asn}</p>`;
     //domaines associés
     const domaines = document.createElement("div");
     domaines.innerHTML = `<h3>Domaines associés :</h3>`;
