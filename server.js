@@ -21,7 +21,7 @@ app.get('/api/data/:search', async (req, res) => {
 
 async function fetchExternalApi(apiKey, searchTerm) {
   const apiUrl = `https://api.shodan.io/shodan/host/${searchTerm}?key=${apiKey}`;
-  console.log('API URL:', apiUrl)
+  //console.log('API URL:', apiUrl)
   const response = await fetch(apiUrl);
   const textResponse = await response.text();
   //console.log('API Response:', textResponse);
