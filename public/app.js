@@ -320,15 +320,34 @@ function afficher_resultat(entreprises, shodanData, vulnerabilities) {
     const vulnInfo = document.createElement("div");
 
     //selectionne le nombre de vulnérabilités trouvées
-    vulnInfo.innerHTML = `<h3>Vulnérabilités trouvées (${vulnerabilities.length})</h3>`;
+    vulnInfo.innerHTML = `<h3>Vulnérabilités trouvées (${vulnerabilities.length}) :</h3>`;
+    vulnInfo.innerHTML= `<p>Vous pouvez consulter les détails de chaque vulnérabilité en cliquant sur son nom dans la liste.</p>`;
 
-    //selectionne les vulnérabilités trouvées
+    //Crée un élément <select>
+    const select = document.createElement("select");
+    select.style.width = "100%";
+    select.id = "vulnerabilitiesSelect"; 
+
+    //Ajoute un écouteur d'événements pour gérer les clics sur les options de la liste déroulante
+    select.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      if (selectedOption.value) {
+        window.open(`https://cve.mitre.org/cgi-bin/cvename.cgi?name=${selectedOption.value}`, '_blank');
+      }
+    });
+
+    //Sélectionne les vulnérabilités trouvées
     vulnerabilities.forEach((vulnerability, index) => {
-      vulnInfo.innerHTML += `<p><strong>${index + 1}. ${vulnerability.cve.id} :</strong> ${vulnerability.cve.descriptions[0].value}</p>`;
+      //Crée un élément <option> pour chaque vulnérabilité
+      const option = document.createElement("option");
+      option.value = vulnerability.cve.id;
+      option.textContent = `${index + 1}. ${vulnerability.cve.id}: ${vulnerability.cve.descriptions[0].value}`;
+      select.appendChild(option);
     });
 
     //affiche les résultats
     blocResultats.appendChild(vulnInfo);
+    blocResultats.appendChild(select);
   }
   
   //debeug
