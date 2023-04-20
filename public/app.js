@@ -6,6 +6,7 @@ ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec
     if(event.keyCode==13)
         rechercher();
 })
+const blocResultats = document.getElementById("bloc-resultats");
 var recherche=document.getElementById("champs_recherche").value="";
 let entreprises = [];
 let vulnerabilities = [];
@@ -54,16 +55,25 @@ function estUneIP(input) {
   return ipv4Pattern.test(input) || ipv6Pattern.test(input);
 }
 
+//fonction qui vide le bloc de résultat et la map
+function vider_resultat(){
+  blocResultats.innerHTML="";
+  document.getElementById("map").style.display="none";
+  document.getElementById("text_map").style.display="none";
+}
+
 async function rechercher() { //lance la recherche
   console.log("------- START : recherche en cours -------");
 
   //récupération du terme de recherche
   terme_recherche = document.getElementById("champs_recherche").value;
-
   console.log('terme_recherche: ' + terme_recherche);
 
+  //vider le bloc de résultat et la map
+  vider_resultat();
+
   if (terme_recherche[0] === undefined) {
-    document.getElementById("empty").textContent = "le champs de recherche est vide";
+    document.getElementById("bloc-resultats").textContent = "le champs de recherche est vide";
   } else {
     //aficher gif d'attente
     document.getElementById("bloc-gif-attente").style.display="block";
@@ -75,7 +85,7 @@ async function rechercher() { //lance la recherche
       console.log("shodanData:", shodanData);
 
       if (shodanData === undefined) {
-        document.getElementById("empty").textContent = "Aucune entreprise trouvée";
+        document.getElementById("bloc-resultats").textContent = "Aucune entreprise trouvée";
         console.log("Aucune entreprise trouvée");
       } else {
         console.log("shodanData city:", shodanData.city);
@@ -91,7 +101,7 @@ async function rechercher() { //lance la recherche
         
       //affiche info de l'entreprise si une entreprise est trouvé
       if (entreprises[0] === undefined) {
-        document.getElementById("empty").textContent = "Aucune entreprise trouvée";
+        document.getElementById("bloc-resultats").textContent = "Aucune entreprise trouvée";
         console.log("Aucune entreprise trouvée");
       } else {
         console.log("Liste entreprises:",entreprises[0])
@@ -111,7 +121,7 @@ async function rechercher() { //lance la recherche
         await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
 
         if (vulnerabilities[0] === undefined) {
-          document.getElementById("empty").textContent = "Aucune vulnérabilité trouvée";
+          document.getElementById("bloc-resultats").textContent = "Aucune vulnérabilité trouvée";
           console.log("Aucune vulnérabilité trouvée");
         } else {
           let n=0;
@@ -129,8 +139,7 @@ async function rechercher() { //lance la recherche
 
     //supprimer gif d'attente
     document.getElementById("bloc-gif-attente").style.display="none";
-    
-    
+        
   }
 }
 
@@ -201,9 +210,6 @@ async function recherche_shodan(terme_recherche) {
 
 function afficher_resultat(entreprises, shodanData, vulnerabilities) {
   console.log("------- TOP5 : afficher_resultat en cours -------");
-
-  const blocResultats = document.getElementById("bloc-resultats");
-  blocResultats.innerHTML = "";
 
   if (shodanData) {
     const ipInfo = document.createElement("div");
@@ -355,6 +361,7 @@ function ajouter_fav(){ //ajoute un favoris
   recherche=document.getElementById("champs_recherche").value;
   empty=document.getElementById('empty');
   if(recherche==""){ //si champs de recherche vide
+    vider_resultats();
     empty.textContent="Vous ne pouvez pas ajouter rien au favoris";
   }
   else{ //si champs de recherche rempli
