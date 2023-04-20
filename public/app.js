@@ -1,26 +1,34 @@
-var bt_search=document.getElementById("btn-lancer-recherche");
-bt_search.addEventListener("click",rechercher);
+// Description: Fichier principal de l'application
+
+//définition des constantes - liaison avec les éléments du DOM
+document.getElementById("btn-lancer-recherche").addEventListener("click",rechercher);
+const blocResultats = document.getElementById("bloc-resultats");
+const recherche=document.getElementById("champs_recherche");
+const erreur=document.getElementById("erreur");
 ch_search=document.getElementById("champs_recherche");
-ch_search.focus();
+
+//permet de lancer la recherche avec la touche entrée + vide le champs de recherche + focus sur le champs de recherche
+ch_search.focus(); //focus sur le champs de recherche
 ch_search.addEventListener("keydown",event=>{ //faire en sorte de recherche avec entrée
     if(event.keyCode==13)
         rechercher();
 })
 ch_search.value=""; //vide le champs de recherche
-const blocResultats = document.getElementById("bloc-resultats");
-var recherche=document.getElementById("champs_recherche");
-var erreur=document.getElementById("erreur");
+
+//définition des variables globales js - utilisées dans les fonctions
 let entreprises = [];
 let vulnerabilities = [];
 let date30joursAvant
 let datejour
 
-son_ip() //récupération de l'IP
+//fonction qui récupère l'IP de l'utilisateur
+son_ip()
 function son_ip(){
     var IP = "https://api.shodan.io/tools/myip";
     request(IP,afficher_IP)
 }
 
+//fonction qui affiche l'IP de l'utilisateur avec un lien de recherche
 function afficher_IP(data){ //affiche l'IP de l'utilisateur avec un lien de recherche
   document.getElementById("bloc-gif-attente").style.display="none";
   var response=JSON.parse(data.contents);
@@ -65,7 +73,8 @@ function vider_resultat(){
   document.getElementById("text_map").style.display="none";
 }
 
-async function rechercher() { //lance la recherche
+//fonction qui lance les recherches
+async function rechercher() {
   console.log("------- START : recherche en cours -------");
 
   //récupération du terme de recherche
@@ -75,23 +84,25 @@ async function rechercher() { //lance la recherche
   //vider le bloc de résultat et la map
   vider_resultat();
 
+  //vérification si le champs de recherche est vide
   if (terme_recherche[0] === undefined) {
     document.getElementById("bloc-resultats").textContent = "le champs de recherche est vide";
   } else {
     //aficher gif d'attente
     document.getElementById("bloc-gif-attente").style.display="block";
 
+    //vérification si l'entrée est une adresse IP
     if (estUneIP(terme_recherche)) {
       console.log("C'est une adresse IP.");
 
-      const shodanData = await recherche_shodan(terme_recherche);
+      const shodanData = await recherche_shodan(terme_recherche); //appel de la fonction pour rechercher l'IP
       console.log("shodanData:", shodanData);
 
-      if (shodanData === undefined) {
-        document.getElementById("bloc-resultats").textContent = "Aucune entreprise ou IP trouvée";
+      //affiche info de l'IP si une IP est trouvé sinon affiche "Aucune entreprise ou IP trouvée"
+      if (shodanData.hasOwnProperty("error")) {
+        erreur.appendChild(document.createTextNode("Aucune entreprise ou IP trouvée"));
         console.log("Aucune valeurs reconnus");
       } else {
-        //console.log("shodanData city:", shodanData.city);
         afficher_resultat(null, shodanData, null);
       }
 
