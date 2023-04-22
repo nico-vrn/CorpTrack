@@ -254,3 +254,20 @@ p#explication {
 	background-color: red;
   }
   
+  /* Style pour l'élément <select> */
+#vulnerabilitiesSelect {
+	color: green;
+	font-weight: bold;
+  }
+  
+  /* Style pour l'élément <option> */
+  #vulnerabilitiesSelect option {
+	color: green;
+  }
+  
+  /* Style pour l'élément <option> lors du survol */
+  #vulnerabilitiesSelect option:hover {
+	color: red;
+	background-color: white;
+  }
+  
