@@ -315,6 +315,8 @@ function afficher_resultat(definition) {
     entrepriseInfo.innerHTML = `<h3>Informations sur l'entreprise</h3>
                                  <p><strong>Nom :</strong> ${entreprises[0].nom_raison_sociale}</p>
                                  <p><strong>Adresse :</strong> ${entreprises[0].siege.adresse}</p>
+                                 <p><strong>SIRET :</strong> ${entreprises[0].siege.siret}</p>
+                                 <p><strong>SIREN :</strong> ${entreprises[0].siren}</p>
                                  <p><strong>Code postal :</strong> ${entreprises[0].siege.code_postal}</p>`;
 
     //affiche les résultats
