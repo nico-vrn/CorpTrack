@@ -321,7 +321,9 @@ function afficher_resultat(definition) {
   }
 
   //si les données viennent de l'API Entreprise
-  if (entreprises && entreprises.length > 0) {
+  if (entreprises[0] === undefined || entreprises.hasOwnProperty("erreur")) {
+    console.log("Pas de données venant de l'API Entreprise");
+  } else if (entreprises && entreprises.length > 0) {
     const entrepriseInfo = document.createElement("div");
 
     //selectionne les informations choisies de l'entreprise
