@@ -102,6 +102,8 @@ function vider_resultat(){
   companies_autocompletion = [];
   vulnerabilities = [];
   shodanData = [];
+  latitude = null;
+  longitude = null;
 }
 
 //fonction qui lance les recherches
@@ -160,7 +162,7 @@ async function rechercher() {
       }
     }
 
-    if (entreprises[0] === undefined || entreprises.hasOwnProperty("erreur") || shodanData.hasOwnProperty("error") || shodanData === undefined) {
+    if ((entreprises.hasOwnProperty("erreur")) || (shodanData.hasOwnProperty("error") || shodanData === undefined)) {
       console.log("Aucune entreprise ou IP trouvée");
       const vulnInfo = document.createElement("p");
       vulnInfo.innerHTML = "/!\\ Aucune entreprise ou IP trouvée /!\\";
@@ -281,6 +283,7 @@ function afficher_resultat(definition) {
     //selectionne les informations choisies de l'IP 
     ipInfo.innerHTML = `<h3>Informations venant de Shodan :</h3> 
                         <p><strong>Adresse IP :</strong> ${shodanData.ip_str}</p>
+                        <p><strong>Nom de l'entreprise :</strong> ${shodanData.org}</p>
                         <p><strong>Ville :</strong> ${shodanData.city} (${shodanData.region_code})</p>
                         <p><strong>Pays :</strong> ${shodanData.country_name} (${shodanData.country_code})</p>
                         <p><strong>OS :</strong> ${shodanData.os}</p>
