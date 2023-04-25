@@ -36,7 +36,8 @@ let vulnerabilities = [];
 let shodanData = [];
 let date30joursAvant
 let datejour
-
+let latitude
+let longitude
 
 
 /* ------------------------------------------
@@ -132,7 +133,7 @@ async function rechercher() {
 
       //affiche info de l'IP si une IP est trouvé sinon affiche "Aucune entreprise ou IP trouvée"
       if (shodanData.hasOwnProperty("error") || shodanData === undefined) {
-        erreur.appendChild(document.createTextNode("Aucune entreprise ou IP trouvée"));
+        erreur.appendChild(document.createTextNode(shodanData.error));
         console.log("Aucune valeurs reconnus");
       } else {
         var nom_societe=shodanData.org;
@@ -159,21 +160,29 @@ async function rechercher() {
       }
     }
 
-    //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 30 derniers jours
-    await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
-
-    //affiche les vulnérabilités si il y en a sinon affiche erreur
-    if (vulnerabilities[0] === undefined) {
-      console.log("Aucune vulnérabilité trouvée");
+    if (entreprises[0] === undefined || entreprises.hasOwnProperty("erreur") || shodanData.hasOwnProperty("error") || shodanData === undefined) {
+      console.log("Aucune entreprise ou IP trouvée");
       const vulnInfo = document.createElement("p");
-      vulnInfo.innerHTML = "/!\\ Aucune vulnérabilité trouvée ou entreprise indéfinie /!\\";
+      vulnInfo.innerHTML = "/!\\ Aucune entreprise ou IP trouvée /!\\";
       erreur.appendChild(vulnInfo);
     } else {
-      let n=0;
-      for (let i = 0; i < vulnerabilities.length; i++) { //affiche les vulnérabilités (pour debeug)
-        //console.log("Liste vulnérabilités:", vulnerabilities[i]);
+
+      //appel de la fonction pour rechercher les vulnérabilités de l'entreprise sur les 30 derniers jours
+      await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
+
+      //affiche les vulnérabilités si il y en a sinon affiche erreur
+      if (vulnerabilities[0] === undefined) {
+        console.log("Aucune vulnérabilité trouvée");
+        const vulnInfo = document.createElement("p");
+        vulnInfo.innerHTML = "/!\\ Aucune vulnérabilité trouvée ou entreprise indéfinie /!\\";
+        erreur.appendChild(vulnInfo);
+      } else {
+        let n=0;
+        for (let i = 0; i < vulnerabilities.length; i++) { //affiche les vulnérabilités (pour debeug)
+          //console.log("Liste vulnérabilités:", vulnerabilities[i]);
+        }
+        console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
       }
-      console.log("Nombre de vulnérabilités trouvés sur les 30 derniers jours :", vulnerabilities.length);
     }
 
     //appel de la fonction qui affiche les résultats
@@ -262,8 +271,10 @@ function afficher_resultat(definition) {
   console.log("------- TOP5 : afficher_resultat en cours -------");
 
   //si les données viennent de Shodan
-  //console.log("shodanData:", Object.keys(shodanData).length)
-  if (Object.keys(shodanData).length > 0) {
+  console.log("shodanData:", Object.keys(shodanData).length)
+  if (shodanData.hasOwnProperty("error")) {
+  
+  } else if (Object.keys(shodanData).length > 0) {
     //console.log("Données venant de Shodan");
     const ipInfo = document.createElement("div");
 
@@ -363,9 +374,6 @@ function afficher_resultat(definition) {
     vulnInfo.appendChild(select);
     blocResultats.appendChild(vulnInfo);
   }
-  
-  //debeug
-  console.log("Latitude:", latitude, "Longitude:", longitude);
 
   //affiche la carte si des coordonnées ont été trouvées
   if (latitude && longitude) {
