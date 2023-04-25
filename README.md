@@ -45,6 +45,27 @@ npm install
 
 ## Utilisation
 
+### Configuration avec fichier.env 
+
+Dans ce projet, nous utilisons un fichier `.env` pour gérer les variables d'environnement sensibles, telles que les clés d'API. Pour vous assurer que vos clés ne sont pas exposées publiquement, vous devez créer un fichier .env local en vous basant sur le fichier `.env.template` fourni.
+
+Voici les étapes pour créer et configurer votre fichier `.env` :
+
+1. Renommez le fichier `.env.template` en `.env` Vous pouvez le faire en exécutant la commande suivante :
+```sh
+cp .env.template .env
+```
+
+2. Ouvrez le fichier `.env` avec votre éditeur de code préféré.
+
+3. Remplacez les valeurs des variables d'environnement par vos propres clés d'API et autres informations sensibles. Par exemple, remplacez `YOUR_API_KEY` par la clé d'API réelle que vous avez obtenue pour une API spécifique.
+
+4. Enregistrez et fermez le fichier `.env.`
+
+Une fois que vous avez configuré votre fichier `.env`, le projet lira automatiquement les variables d'environnement définies dans ce fichier. Vous n'avez pas besoin de modifier le code du projet pour utiliser vos propres clés d'API.
+
+### Lancement du serveur Express
+
 1. Démarrez le serveur de développement local avec Express :
 ```sh
 node server.js
