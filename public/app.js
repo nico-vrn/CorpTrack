@@ -16,6 +16,7 @@ const blocResultats = document.getElementById("bloc-resultats");
 const recherche=document.getElementById("champs_recherche");
 const erreur=document.getElementById("erreur");
 const etoile_fav=document.getElementById("btn-favoris");
+const liste_json='ressources/liste_company.json' 
 ch_search=document.getElementById("champs_recherche");
 
 //permet à l'initialisation de la fenêtre de lancer la recherche avec la touche entrée + lancer l'autocomplétion + focus sur le champs de recherche + vide le champs de recherche 
@@ -35,6 +36,7 @@ let vulnerabilities = [];
 let shodanData = [];
 let date30joursAvant
 let datejour
+
 
 
 /* ------------------------------------------
@@ -614,14 +616,30 @@ gestion de l'auto-completion
 
 ------------------------------------------ */
 
-// Récupération des données du fichier JSON et met dans un tableau "companies_autocompletion"
-fetch('ressources/liste_company.json')
+// Récupération des données du fichier JSON défini en constante et ajoute dans le tableau "companies_autocompletion"
+fetch(liste_json)
     .then((response) => response.json())
     .then((data) => {
-      companies_autocompletion = data;
+      for(var i=0;i<data.length;i++){
+        companies_autocompletion.push(data[i]);
+      }
     })
     .catch((error) => console.error('Erreur lors du chargement du fichier JSON:', error));
 
+// Récupération des entreprises présent dans l'etf S&P500 (fichier JSON) et ajoute dans le tableau "companies_autocompletion"
+async function fetchCompanies() {
+  const response = await fetch('/api/companies');
+  const companies_autocompletion_deb = await response.json();
+  console.log(companies_autocompletion_deb.length);
+  for (var i=0;i<companies_autocompletion_deb.length;i++){
+    companies_autocompletion.push(companies_autocompletion_deb[i].name);
+  }
+  //testElements(companies_autocompletion); //décommenter pour effectuer le test de la liste en json avec l'api
+  console.log(companies_autocompletion.length);
+  //console.log('Données du fichier JSON:', companies_autocompletion)
+  //testElements(companies_autocompletion); //décommenter pour effectuer le test de la liste en json avec l'api
+}
+fetchCompanies();
 
 // Fonction pour créer l'autocomplétion
 function autocomplete(input, suggestions) {
@@ -661,4 +679,61 @@ function gestion_autocomplete(event) {
 
     //appel de la fonction autocomplete pour afficher les suggestions
     autocomplete(input, suggestions);
+}
+
+
+/* ------------------------------------------
+
+fonction qui test simplement la liste en json choisi avec l'api d'entreprise française pour savoir si toutes les entreprises sur le json sont bien sur l'api
+
+------------------------------------------ */
+
+var elements = [];
+const liste_json2='ressources/liste_company.json' //changer cette constante avec sa liste d'entreprise pour l'autocompletition
+
+//décommenter la ligne ci-dessous pour effectuer le test de la liste en json choisis avec l'api
+//recup_json(liste_json); 
+async function recup_json(liste_json){
+  
+  fetch(liste_json)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Données du fichier JSON:', data)
+      elements = data;
+      testElements(elements)
+    })
+    .catch((error) => console.error('Erreur lors du chargement du fichier JSON:', error));
+}
+
+async function waitRandomSeconds(min, max) {
+  const randomSeconds = Math.floor(Math.random() * (max - min + 1)) + min;
+  return new Promise(resolve => setTimeout(resolve, randomSeconds * 1000));
+}
+
+async function testElements(elements) {
+  const noResults = [];
+
+  console.log("Début de la recherche pour les éléments :", elements);
+
+  //boucle qui test chaque element.name de la liste elements
+  for(var i=0;i<elements.length;i++){
+    // Attendre un nombre aléatoire de secondes entre 3 et 20
+    //await waitRandomSeconds(3, 20); //pas utile en général mais si l'api est surchargé il faut attendre un peu entre chaque requête
+
+    console.log(`Recherche en cours pour l'élément : ${elements[i].name}`);
+    const url = 'https://recherche-entreprises.api.gouv.fr/search?q=' + elements[i].name;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.results.length === 0) {
+      console.log(`Aucun résultat trouvé pour l'élément : ${elements[i].name}`);
+      noResults.push(elements[i].name);
+    } else {
+      console.log(`Résultats trouvés pour l'élément : ${elements[i].name}`);
+    }
+  }
+
+  console.log("Recherche terminée. Aucun résultat pour les éléments suivants :", noResults);
+
+  return noResults;
 }

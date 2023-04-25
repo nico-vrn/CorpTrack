@@ -27,6 +27,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "node-fetch": "^3.3.1"
-  }  
+    "node-fetch": "^3.3.1",
+    "sp500-companies-as-json": "^0.9.0"
+  }
 }
