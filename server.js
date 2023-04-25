@@ -12,6 +12,12 @@ app.use(express.static('public'));
 app.get('/api/data/:search', async (req, res) => {
   const shodanKey = process.env.shodanKey;
   //console.log('API Key:', shodanKey)
+  if (shodanKey) {
+    console.log("API shodan OK")
+  }
+  else {
+    console.log("API shodan NOT OK")
+  }
   const searchTerm = req.params.search;
   const data = await fetchExternalApi(shodanKey, searchTerm);
   res.json(data);
@@ -31,6 +37,12 @@ async function getSp500Companies() {
   const companies = await sp500CompaniesAsJSON();
   //console.log(companies.length)
   //console.log(companies[120])
+  if (companies.length === 505) {
+    console.log("API S&P500 OK")
+  }
+  else {
+    console.log("API S&P500 NOT OK")
+  }
   return companies;
 }
 
