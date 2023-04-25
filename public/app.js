@@ -634,7 +634,6 @@ async function fetchCompanies() {
   for (var i=0;i<companies_autocompletion_deb.length;i++){
     companies_autocompletion.push(companies_autocompletion_deb[i].name);
   }
-  //testElements(companies_autocompletion); //décommenter pour effectuer le test de la liste en json avec l'api
   console.log(companies_autocompletion.length);
   //console.log('Données du fichier JSON:', companies_autocompletion)
   //testElements(companies_autocompletion); //décommenter pour effectuer le test de la liste en json avec l'api
@@ -692,7 +691,7 @@ var elements = [];
 const liste_json2='ressources/liste_company.json' //changer cette constante avec sa liste d'entreprise pour l'autocompletition
 
 //décommenter la ligne ci-dessous pour effectuer le test de la liste en json choisis avec l'api
-//recup_json(liste_json); 
+recup_json(liste_json); 
 async function recup_json(liste_json){
   
   fetch(liste_json)
@@ -715,21 +714,26 @@ async function testElements(elements) {
 
   console.log("Début de la recherche pour les éléments :", elements);
 
-  //boucle qui test chaque element.name de la liste elements
-  for(var i=0;i<elements.length;i++){
+  // Boucle qui teste chaque element.name de la liste elements
+  for (var i = 0; i < elements.length; i++) {
     // Attendre un nombre aléatoire de secondes entre 3 et 20
     //await waitRandomSeconds(3, 20); //pas utile en général mais si l'api est surchargé il faut attendre un peu entre chaque requête
 
-    console.log(`Recherche en cours pour l'élément : ${elements[i].name}`);
-    const url = 'https://recherche-entreprises.api.gouv.fr/search?q=' + elements[i].name;
-    const response = await fetch(url);
-    const data = await response.json();
+    console.log(`Recherche en cours pour l'élément : ${elements[i]}`);
+    const url = 'https://recherche-entreprises.api.gouv.fr/search?q=' + elements[i];
 
-    if (data.results.length === 0) {
-      console.log(`Aucun résultat trouvé pour l'élément : ${elements[i].name}`);
-      noResults.push(elements[i].name);
-    } else {
-      console.log(`Résultats trouvés pour l'élément : ${elements[i].name}`);
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.results.length === 0) {
+        console.log(`AUCUN résultat trouvé pour l'élément : ${elements[i]}`);
+        noResults.push(elements[i]);
+      } else {
+        //console.log(`Résultats trouvés pour l'élément : ${elements[i]}`);
+      }
+    } catch (error) {
+      console.error(`Erreur lors de la recherche pour l'élément ${elements[i]}:`, error);
     }
   }
 
