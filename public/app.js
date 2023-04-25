@@ -19,7 +19,7 @@ const etoile_fav=document.getElementById("btn-favoris");
 const liste_json='ressources/liste_company.json' 
 ch_search=document.getElementById("champs_recherche");
 
-//permet à l'initialisation de la fenêtre de lancer la recherche avec la touche entrée + lancer l'autocomplétion + focus sur le champs de recherche + vide le champs de recherche 
+//permet de lancer la recherche avec la touche entrée + lancer l'autocomplétion + focus sur le champs de recherche + vide le champs de recherche 
 ch_search.addEventListener("keydown",event=>{ 
     if(event.keyCode==13)
         rechercher();
