@@ -1,8 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import path from 'path';
 import fetch from 'node-fetch';
-
+import sp500CompaniesAsJSON from 'sp500-companies-as-json'
 
 dotenv.config();
 const app = express();
@@ -18,7 +17,6 @@ app.get('/api/data/:search', async (req, res) => {
   res.json(data);
 });
 
-
 async function fetchExternalApi(apiKey, searchTerm) {
   const apiUrl = `https://api.shodan.io/shodan/host/${searchTerm}?key=${apiKey}`;
   //console.log('API URL:', apiUrl)
@@ -28,6 +26,18 @@ async function fetchExternalApi(apiKey, searchTerm) {
   const data = JSON.parse(textResponse);
   return data;
 }
+
+async function getSp500Companies() {
+  const companies = await sp500CompaniesAsJSON();
+  //console.log(companies.length)
+  //console.log(companies[120])
+  return companies;
+}
+
+app.get('/api/companies', async (req, res) => {
+  const companies = await getSp500Companies();
+  res.json(companies);
+});
 
 
 app.listen(port, () => {
