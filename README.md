@@ -25,6 +25,7 @@
 
 - Node.js installé (version recommandée : 14.x ou supérieure)
 - Un éditeur de code tel que Visual Studio Code
+- Une clé d'[API shodan](https://developer.shodan.io/api) valide
 
 ## Installation
 
@@ -77,7 +78,8 @@ Le serveur devrait démarrer sur `http://localhost:3000`.
 
 ## Fonctionnalités principales
 
-- Liste des fonctionnalités principales de votre projet.
+- Recherche d'informations sur des entreprises à partir de leurs IP ou leurs noms
+- Recherche de vulnérabilités sur des entreprises 
 
 ## Contribution
 
@@ -88,7 +90,7 @@ Les contributions sont les bienvenues ! Pour contribuer, suivez les étapes suiv
 3. Faites vos modifications et soumettez-les avec un commit.
 4. Créez une pull request vers la branche `main` du dépôt d'origine.
 
-##Dependances:
+## Dependances:
 
 API utilisés :
 - [API recherche d'entreprise française](https://api.gouv.fr/documentation/api-recherche-entreprises)
