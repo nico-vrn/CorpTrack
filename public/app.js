@@ -148,7 +148,7 @@ async function rechercher() {
       await recherche_companie(terme_recherche);
         
       //affiche info de l'entreprise si une entreprise est trouvé
-      if (entreprises[0] === undefined) {
+      if (entreprises[0] === undefined || entreprises.hasOwnProperty("erreur")) {
         document.getElementById("bloc-resultats").textContent = "Aucune entreprise trouvée";
         console.log("Aucune entreprise trouvée");
       } else {
@@ -691,7 +691,7 @@ var elements = [];
 const liste_json2='ressources/liste_company.json' //changer cette constante avec sa liste d'entreprise pour l'autocompletition
 
 //décommenter la ligne ci-dessous pour effectuer le test de la liste en json choisis avec l'api
-recup_json(liste_json); 
+//recup_json(liste_json); 
 async function recup_json(liste_json){
   
   fetch(liste_json)
