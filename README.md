@@ -78,8 +78,16 @@ Le serveur devrait démarrer sur `http://localhost:3000`.
 
 ## Fonctionnalités principales
 
-- Recherche d'informations sur des entreprises à partir de leurs IP ou leurs noms
-- Recherche de vulnérabilités sur des entreprises 
+- Recherche à partir d'un nom d'entreprise française ou d'une adresse IP quelconque 
+- Recherche d'entreprise française à l'aide de l'API [API recherche d'entreprise française](https://api.gouv.fr/documentation/api-recherche-entreprises).
+- Recherche d'informations sur l'adresse IP de l'entreprise en utilisant l'[API shodan](https://developer.shodan.io/api).
+- Recherche de vulnérabilités sur l'entreprise sur les 30 derniers jours en utilisant l'[API NVD](https://nvd.nist.gov/developers/vulnerabilities)
+- Affichage des informations sur l'entreprise (nom, adresse, SIRET, SIREN code postal ...etc).
+- Affichage du nombre de vulnérabilités trouvées et possibilité de consulter les détails en cliquant sur chaque vulnérabilité.
+- Affichage des informations de l'adresse IP (ville, pays, système d'exploitation, code ASN ...etc).
+- Affichage des domaines associés à l'adresse IP.
+- Affichage des ports ouverts sur l'adresse IP.
+- Affichage d'une carte avec la position géographique de l'entreprise ou de l'adresse IP (si disponible).
 
 ## Contribution
 
@@ -90,7 +98,7 @@ Les contributions sont les bienvenues ! Pour contribuer, suivez les étapes suiv
 3. Faites vos modifications et soumettez-les avec un commit.
 4. Créez une pull request vers la branche `main` du dépôt d'origine.
 
-## Dependances:
+## Dependances
 
 API utilisés :
 - [API recherche d'entreprise française](https://api.gouv.fr/documentation/api-recherche-entreprises)
