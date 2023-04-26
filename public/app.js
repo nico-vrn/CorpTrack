@@ -49,18 +49,33 @@ Fonctions principales de recherche et d'affichage
 //fonction qui récupère l'IP de l'utilisateur
 son_ip()
 function son_ip(){
-    var IP = "https://api.shodan.io/tools/myip";
-    request(IP,afficher_IP)
+  
+  fetch('https://ifconfig.me/ip', {
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+
+  .then(response => response.text())
+  .then(text => {
+ 
+    // Récupère l'élément avec l'ID "ip-address"
+    const ipAddressElement = document.getElementById('mon_ip');
+    // Met à jour le contenu de l'élément avec la réponse de la requête fetch
+    ipAddressElement.textContent = text;
+  })
+  .catch(error => console.error(error));
+
 }
 
 //fonction qui affiche l'IP de l'utilisateur avec un lien cliquable pour l'a rechercher directement
 function afficher_IP(data){ 
   document.getElementById("bloc-gif-attente").style.display="none"; //cache le gif d'attente
-  var response=JSON.parse(data.contents);
+  var response = JSON.parse(data.contents);
   var IP=document.getElementById("mon_ip");
-  IP.textContent="Votre IP est: "+response;
+  IP.textContent="Votre IP est: "+ response;
   IP.addEventListener("click",function(){
-    ch_search.value=response;
+    ch_search.value = response;
     rechercher();
   });
 }
