@@ -24,39 +24,15 @@ app.get('/api/data/:search', async (req, res) => {
 
   const searchTerm = req.params.search;
   const data = await fetchExternalApi(shodanKey, searchTerm);
-  
   if (data.error) {
     return res.status(500).json(data);
   }
-
   res.json(data);
-
-  const SubDomainData = await fetchExternalApiSubDomain(shodanKey, searchTerm);
-  
-  if (SubDomainData.error) {
-    return res.status(500).json(SubDomainData);
-  }
-
-  res.json(SubDomainData);
-
 });
 
 async function fetchExternalApi(apiKey, searchTerm) {
   try {
     const apiUrl = `https://api.shodan.io/shodan/host/${searchTerm}?key=${apiKey}`;
-    const response = await fetch(apiUrl);
-    const textResponse = await response.text();
-    const data = JSON.parse(textResponse);
-    return data;
-  } catch (error) {
-    console.error('Error fetching data from Shodan API:', error);
-    return { error: 'Erreur lors de la récupération des données de l\'API Shodan. Veuillez vérifier votre clé API et réessayer.' };
-  }
-}
-
-async function fetchExternalApiSubDomain(apiKey, searchTerm) {
-  try {
-    const apiUrl = `https://api.shodan.io/dns/domain/${searchTerm}?key=${apiKey}`;
     const response = await fetch(apiUrl);
     const textResponse = await response.text();
     const data = JSON.parse(textResponse);
