@@ -274,7 +274,7 @@ async function recherche_shodan(terme_recherche) {
 
       resolve(shodanData);
     } catch (error) {
-      console.error("Erreur lors de la récupération des données:", error);
+      console.error("Une ou plusieurs erreurs lors de la récupération des données : ", error);
       reject(error);
     }
   });
