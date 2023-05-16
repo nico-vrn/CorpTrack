@@ -36,6 +36,7 @@ async function fetchExternalApi(apiKey, searchTerm) {
     const response = await fetch(apiUrl);
     const textResponse = await response.text();
     const data = JSON.parse(textResponse);
+    
     return data;
   } catch (error) {
     console.error('Error fetching data from Shodan API:', error);
