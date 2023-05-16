@@ -239,6 +239,7 @@ p#explication {
 
 #autocomplete-container {
 	position: absolute;
+	width: 100%;
 	z-index: 1;
 	background-color: black;
 	border: 1px solid #ccc;
