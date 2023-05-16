@@ -49,8 +49,21 @@ Fonctions principales de recherche et d'affichage
 //fonction qui récupère l'IP de l'utilisateur
 son_ip()
 function son_ip(){
-    var IP = "https://api.shodan.io/tools/myip";
-    request(IP,afficher_IP)
+    fetch('https://ifconfig.me/ip', {
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+
+    .then(response => response.text())
+    .then(text => {
+
+      // Récupère l'élément avec l'ID "ip-address"
+      const ipAddressElement = document.getElementById('mon_ip');
+      // Met à jour le contenu de l'élément avec la réponse de la requête fetch
+      ipAddressElement.textContent = text;
+    })
+    .catch(error => console.error(error));
 }
 
 //fonction qui affiche l'IP de l'utilisateur avec un lien cliquable pour l'a rechercher directement
@@ -257,6 +270,13 @@ async function recherche_shodan(terme_recherche) {
       // Stocke les données récupérées dans la variable globale shodanData
       shodanData = data;
 
+      // Appel de la fonction pour récuperer les sous domaines
+      const subdomainResponse = await fetchExternalApi(shodanKey, terme_recherche, true);
+      const subdomainData = await subdomainResponse.json();
+
+      // Stocke les données des sous-domaines dans la variable globale shodanSubdomains
+      shodanSubdomains = subdomainData;
+
       resolve(shodanData);
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);
@@ -388,6 +408,7 @@ function afficher_resultat(definition) {
     mapInfo.innerHTML = "/!\\ Aucune position géographique trouvée";
     erreur.appendChild(mapInfo);
   }
+
 }
 
 

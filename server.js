@@ -25,9 +25,14 @@ app.get('/api/data/:search', async (req, res) => {
   res.json(data);
 });
 
-async function fetchExternalApi(apiKey, searchTerm) {
+async function fetchExternalApi(apiKey, searchTerm, fetchSubdomains = false) {
   try {
-    const apiUrl = `https://api.shodan.io/shodan/host/${searchTerm}?key=${apiKey}`;
+    let apiUrl;
+    if (fetchSubdomains) {
+      apiUrl = `https://api.shodan.io/dns/domain/${searchTerm}?key=${apiKey}`;
+    } else {
+      apiUrl = `https://api.shodan.io/shodan/host/${searchTerm}?key=${apiKey}`
+    }
     const response = await fetch(apiUrl);
     const textResponse = await response.text();
     const data = JSON.parse(textResponse);
