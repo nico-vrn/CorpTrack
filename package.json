@@ -1,0 +1,33 @@
+{
+  "name": "corptrack",
+  "version": "1.0.0",
+  "description": "Site d'information et de recherche de vulnérabilités sur les entreprises",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nico-vrn/CorpTrack.git"
+  },
+  "keywords": [
+    "corptrack",
+    "osint",
+    "information",
+    "vulnerabilite"
+  ],
+  "author": "nico-vrn, alixxila, aurmtn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nico-vrn/CorpTrack/issues"
+  },
+  "homepage": "https://github.com/nico-vrn/CorpTrack#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.1",
+    "sp500-companies-as-json": "^0.9.0"
+  }
+}
