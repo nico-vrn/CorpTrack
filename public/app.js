@@ -213,7 +213,7 @@ async function rechercher() {
 
       }
 
-    } else if (estUnDomaine(terme_recherche)) { //Si c'est un domaine
+    } else if (estUnDomaine(terme_recherche) == true) { //Si c'est un domaine
 
       console.log("C'est un domaine' .");
 
@@ -394,15 +394,48 @@ async function recherche_shodanSubdomain(terme_recherche) {
 
 //fonction qui va afficher les résultats des recherches
 
+
+/*-------------------------------------------------------------------*/
+
+
 function afficher_resultat(definition) {
   console.log("------- TOP5 : afficher_resultat en cours -------");
 
-  //si les données viennent de Shodan
+  //si les données viennent de Shodan et contiennent des sous domaines
+
+  if(shodanData.hasOwnProperty('subdomains')){
+
+    const resultatElement = document.createElement("div");
+    resultatElement.id="resultat";
+
+    // Récup des sous-domaines à partir de shodanData
+    const sousDomaines = shodanData.subdomains;
+
+    // Création d'une liste (ul) pour afficher les sous-domaines
+    const listeSousDomaines = document.createElement("ul");
+
+    // Parcoure les sous-domaines et créez des éléments de liste (li) pour chaque sous-domaine
+    sousDomaines.forEach((sousDomaine) => {
+      const elementLi = document.createElement("li");
+      elementLi.textContent = sousDomaine + "." + terme_recherche;
+      listeSousDomaines.appendChild(elementLi);
+    });
+
+    // Ajoute la liste des sous-domaines à l'élément HTML de résultat
+    blocResultats.appendChild(resultatElement);
+    
+    resultatElement.innerHTML = `<h3>Liste des sous domaines de ${terme_recherche} :</h3>`
+
+    // Ajout des résultats dans la div bloc-resultats
+    blocResultats.appendChild(listeSousDomaines);
+
+  }
 
   console.log("shodanData:", Object.keys(shodanData).length)
   if (shodanData.hasOwnProperty("error")) {
 
-  } else if (Object.keys(shodanData).length > 0) {
+  } else if (shodanData.hasOwnProperty('city')) {
+    
     //console.log("Données venant de Shodan");
     const ipInfo = document.createElement("div");
 
@@ -446,6 +479,7 @@ function afficher_resultat(definition) {
     //stocke les coordonnées de l'IP pour l'afficher sur la carte
     latitude = shodanData.latitude;
     longitude = shodanData.longitude;
+
   }
 
   //si les données viennent de l'API Entreprise
