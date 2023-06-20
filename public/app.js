@@ -48,44 +48,26 @@ Fonctions principales de recherche et d'affichage
 
 //fonction qui récupère l'IP de l'utilisateur
 
-son_ip()
 function son_ip() {
   fetch('https://ifconfig.me/ip', {
     headers: {
       'Accept': 'application/json'
     }
   })
-
     .then(response => response.text())
     .then(text => {
-
-      // Récupère l'élément avec l'ID "ip-address"
-
       const ipAddressElement = document.getElementById('mon_ip');
-      
-      // Met à jour le contenu de l'élément avec la réponse de la requête fetch
-
       ipAddressElement.textContent = text;
+      ipAddressElement.addEventListener('click', function () {
+        ch_search.value = text;
+        rechercher();
+      });
     })
     .catch(error => console.error(error));
+
+  document.getElementById('bloc-gif-attente').style.display = 'none';
 }
-
-
-/*-------------------------------------------------------------------*/
-
-
-//fonction qui affiche l'IP de l'utilisateur avec un lien cliquable pour l'a rechercher directement
-
-function afficher_IP(data) {
-  document.getElementById("bloc-gif-attente").style.display = "none"; //cache le gif d'attente
-  var response = JSON.parse(data.contents);
-  var IP = document.getElementById("mon_ip");
-  IP.textContent = "Votre IP est: " + response;
-  IP.addEventListener("click", function () {
-    ch_search.value = response;
-    rechercher();
-  });
-}
+son_ip();
 
 
 /*-------------------------------------------------------------------*/
@@ -215,7 +197,7 @@ async function rechercher() {
 
     } else if (estUnDomaine(terme_recherche) == true) { //Si c'est un domaine
 
-      console.log("C'est un domaine' .");
+      console.log("C'est un domaine.");
 
       await recherche_shodanSubdomain(terme_recherche);
       
@@ -801,35 +783,42 @@ gestion de l'auto-completion
 
 ------------------------------------------ */
 
-// Récupération des données du fichier JSON défini en constante et ajoute dans le tableau "companies_autocompletion"
-fetch(liste_json)
-  .then((response) => response.json())
-  .then((data) => {
-    for (var i = 0; i < data.length; i++) {
+async function fetchCompanies() {
+  if (companies_autocompletion.length > 0) {
+    console.log('Le tableau companies_autocompletion est déjà rempli. Pas besoin de récupérer les données.');
+    return;
+  }
+
+  try {
+    // Récupération des données du fichier JSON défini en constante et ajout dans le tableau "companies_autocompletion"
+    const response1 = await fetch(liste_json);
+    const data = await response1.json();
+    for (let i = 0; i < data.length; i++) {
       companies_autocompletion.push(data[i]);
     }
-  })
-  .catch((error) => console.error('Erreur lors du chargement du fichier JSON:', error));
 
-// Récupération des entreprises présent dans l'etf S&P500 (fichier JSON) et ajoute dans le tableau "companies_autocompletion"
-async function fetchCompanies() {
-  const response = await fetch('/api/companies');
-  const companies_autocompletion_deb = await response.json();
-  console.log(companies_autocompletion_deb.length);
-  for (var i = 0; i < companies_autocompletion_deb.length; i++) {
-    companies_autocompletion.push(companies_autocompletion_deb[i].name);
+    // Récupération des entreprises présentes dans l'ETF S&P500 (fichier JSON) et ajout dans le tableau "companies_autocompletion"
+    const response2 = await fetch('/api/companies');
+    const companies_autocompletion_deb = await response2.json();
+    console.log(companies_autocompletion_deb.length);
+    for (let i = 0; i < companies_autocompletion_deb.length; i++) {
+      companies_autocompletion.push(companies_autocompletion_deb[i].name);
+    }
+    console.log(companies_autocompletion.length);
+    // console.log('Données du fichier JSON :', companies_autocompletion);
+
+    // testElements(companies_autocompletion); // Décommenter pour effectuer le test de la liste en JSON avec l'API
+  } catch (error) {
+    console.error('Erreur lors du chargement du fichier JSON ou de la récupération des entreprises :', error);
   }
-  console.log(companies_autocompletion.length);
-  //console.log('Données du fichier JSON:', companies_autocompletion)
-  //testElements(companies_autocompletion); //décommenter pour effectuer le test de la liste en json avec l'api
 }
-fetchCompanies();
+
 
 /*-------------------------------------------------------------------*/
 
 // Fonction pour créer l'autocomplétion
 function autocomplete(input, suggestions) {
-  //console.log('autocomplete');
+  console.log('autocomplete');
   const container = document.getElementById('autocomplete-container');
   container.innerHTML = '';
 
@@ -851,23 +840,37 @@ function autocomplete(input, suggestions) {
 
 // Fonction pour gérer l'autocomplétion
 function gestion_autocomplete(event) {
-  //console.log('gestion autocomplete');
+  fetchCompanies();
+  console.log('gestion autocomplete');
   const input = event.target;
   const searchTerm = input.value.toLowerCase();
 
-  //si le champs de recherche est vide on ne fait rien
+  // Si le champ de recherche est vide, on ne fait rien
   if (searchTerm === '') {
     autocomplete(input, []);
+    console.log("vide");
     return;
   }
-  //si le champs de recherche n'est pas vide on affiche les suggestions correspondantes à la recherche
+
+  // Filtrer les suggestions pour ne conserver que les mots qui commencent par le terme recherché
   const suggestions = companies_autocompletion.filter((company) =>
-    company.toLowerCase().includes(searchTerm)
+    company.toLowerCase().startsWith(searchTerm)
   );
 
-  //appel de la fonction autocomplete pour afficher les suggestions
+  console.log("taille json companie:", companies_autocompletion.length);
+
+  // Appel de la fonction autocomplete pour afficher les suggestions
   autocomplete(input, suggestions);
+
+   // Ajout d'un événement d'écouteur pour le clic sur les éléments de la liste
+   const autocompleteList = document.getElementById('autocomplete-container');
+   autocompleteList.addEventListener('click', function (event) {
+     const selectedCompany = event.target.innerText;
+     input.value = selectedCompany;
+     //rechercher();
+   });
 }
+
 
 
 /* ------------------------------------------
