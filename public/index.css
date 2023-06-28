@@ -1,273 +1,197 @@
-/* Importation de la police Roboto */
-@import url(https://fonts.googleapis.com/css?family=Roboto);
 
-/* Définition des principales couleurs */
-:root {
-	--text-color : #fafafa; /* Texte presque blanc */
-	--background: #34495e; /* Fond bleu foncé */
-	--main-green: rgb(26, 188, 156);
-	--active-green: rgb(20, 156, 128);
-}
+		body {
+			background-color: #252525;
+			color: #ffffff;
+			margin: 0;
+			padding: 0;
+		}
 
-* {
-	color: var(--text-color) ;
-}
+		header {
+			background-color: #1f1f1f;
+			padding: 20px;
+			text-align: center;
+		}
 
-body {
-	background-color: var(--background);
-	font: 14pt Roboto, Arial, sans-serif;
-	margin: 0;
-	padding: 0;
-	width: 90%;
-	margin: 40px auto;
-}
+		h1 {
+			color: #ffffff;
+			font-size: 70px;
+			margin: 0;
+		}
 
-/* Paragraphes "Aucun résultat..." et "Aucune recherche..." */
-p.info-vide {
-	font-style: italic;
-}
+		#explication {
+			color: #cccccc;
+			font-size: 25px;
+			margin: 20px 0;
+		}
 
-/* Partie En-tête */
-h1 {
-	/* margin-top: 1em; */
-	text-align: center;
-	font-variant: small-caps;
-	font-size: 2.5em;
-	color: var(--main-green);
-}
+		#mon_ip {
+			color: #cccccc;
+			font-size: 14px;
+			text-decoration: none;
+		}
 
-p#explication {
-	font-size: 1.2em;
-}
+		hr {
+			border: none;
+			border-top: 1px solid #333333;
+			margin: 0;
+		}
 
-/* Conteneur principal */
-#conteneur {
-	display: flex;
-	flex: 1;
-	margin: 30px auto;
-}
+		#conteneur {
+			display: flex;
+			justify-content: space-between;
+			padding: 20px;
+		}
 
-/* Section Recherche (avec résultats) */
-#section-recherche {
-	margin-top: 0;
-	flex: 1 1 auto;
-}
+		#section-recherche {
+			width: 60%;
+		}
 
-#bloc-recherche {
-	display: flex;
-	margin: 0 auto ;
-	min-width: 450px;
-	flex-direction: row;
-}
+		#section-separation {
+			border-left: 2px solid #0442c1;
+			margin: 0 20px;
+		}
 
-#bloc-recherche>input[type=text],
-#bloc-recherche>button {
-	display: block;
-	font-size: 1.2em ;
-}
+		#section-favoris {
+			width: 35%;
+		}
 
-#bloc-recherche>input[type=text] {
-	color: #2d2d2d; /* Presque noir */
-	flex: 1;
-	padding: 0.7em;
-	border: 0.3em solid var(--main-green);
-}
+		#bloc-recherche {
+			display: flex;
+			align-items: center;
+			margin-bottom: 20px;
+		}
 
-#bloc-recherche>button {
-	padding: 0.8em 0.8em;
-	/* Bordure invisible pour que le hover ne bouge pas le bouton */
-	border: 1px solid var(--main-green);
+		input[type="text"] {
+			width: 100%;
+			padding: 10px;
+			font-size: 16px;
+			border-radius: 5px;
+			border: none;
+		}
 
-	/* Par défaut, les boutons sont en gris
-	 (S'ils sont "clicables", ils passent en vert) */
-	background-color: #bebebe;
-}
+		#btn-lancer-recherche,
+		#btn-favoris,
+		#btn-supp {
+			background-color: #333333;
+			border: none;
+			border-radius: 5px;
+			padding: 10px;
+			margin-left: 10px;
+			cursor: pointer;
+		}
 
-/* Apparences des boutons clicables */
-#bloc-recherche>button.btn_clicable {
-	background-color: var(--main-green);
-}
+		#btn-lancer-recherche:hover,
+		#btn-favoris:hover,
+		#btn-supp:hover {
+			background-color: #444444;
+		}
 
-#bloc-recherche>button:focus {
-	/* Pour éviter un affichage disgracieux
-		quand le bouton reste en focus */
-	outline: 0 !important;
-}
+		.btn_clicable {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
-#bloc-recherche>button.btn_clicable:hover {
-	cursor: pointer;
-	border: 1px solid white;
-}
+		#img-vide,
+		#img-pleine {
+			margin-right: 5px;
+		}
 
-#bloc-recherche>button.btn_clicable:active {
-	background-color: var(--active-green);
-}
+		#autocomplete-container {
+			margin-bottom: 20px;
+		}
 
-.autocomplete-items {
-	border: 1px solid #d4d4d4;
-	border-bottom: none;
-	border-top: none;
-	z-index: 99;
-	top: 100%;
-	left: 0;
-	right: 0;
-  }
-  
-  .autocomplete-items div {
-	padding: 10px;
-	cursor: pointer;
-	border-bottom: 1px solid #d4d4d4; 
-  }
-  
-  .autocomplete-items div:hover {
-	cursor: pointer;
-	border: 1px solid red;
-  }
-  
-  .autocomplete-active {
-	background-color: DodgerBlue !important; 
-	color: #ffffff; 
-  }
+		#bloc-gif-attente {
+			display: flex;
+			justify-content: center;
+			margin-bottom: 20px;
+		}
 
-#btn-supp{
-	background-color: var(--main-green);
-}
-#btn-supp:focus {
-	/* Pour éviter un affichage disgracieux
-		quand le bouton reste en focus */
-	outline: 0 !important;
-}
+		#bloc-resultats {
+			margin-bottom: 20px;
+		}
 
-#btn-supp:hover {
-	cursor: pointer;
-	border: 1px solid white;
-}
-#btn-supp:active {
-	background-color: var(--active-green);
-}
+		#erreur {
+			color: #ff0000;
+			font-size: 16px;
+			margin-bottom: 20px;
+		}
 
-#mon_ip:focus {
-	/* Pour éviter un affichage disgracieux
-		quand le bouton reste en focus */
-	outline: 0 !important;
-}
+		#text_map {
+			color: #ffffff;
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
 
-#mon_ip:hover {
-	cursor: pointer;
-	border: 1px solid white;
-}
-#mon_ip:active {
-	background-color: var(--active-green);
-}
+		#map {
+			height: 300px;
+			border-radius: 5px;
+			overflow: hidden;
+		}
 
-/* GIF de chargement (caché par défaut) */
-#bloc-gif-attente {
-	display: none;
-	margin: 40px;
-	text-align: center;
-}
-#map{ /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
-	height:400px;
-	display: none;
-}
+		#section-favoris h2 {
+			color: #ffffff;
+			font-size: 24px;
+			margin: 0;
+			margin-bottom: 10px;
+		}
 
-#text_map{
-	display: none;
-}
-#img-pleine{
-	display:none;
-}
-#info-video{
-	display: none;
-}
+		#liste-favoris {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
 
-#bloc-resultats p.res::before{
-	/* Affichage d'une flèche devant chaque résultat
-		(Cf. https://unicode-table.com/fr/21E8/ ) */
-	content: "\21E8\00A0";
-}
+		#liste-favoris li {
+			margin-bottom: 5px;
+		}
 
-/* Section de la barre de séparation */
-#section-separation {
-	border-left: 2px dashed var(--main-green);
-	margin: 0 20px;
-}
+		#info-vide {
+			color: #cccccc;
+			font-size: 14px;
+			margin: 10px 0;
+		}
 
-/* Section des recherches favorites */
-#section-favoris {
-	flex: 0 0 300px;
-	margin-top: 0;
-	margin-bottom: 20px;
-}
+		.dark-mode {
+			background-color: #000000;
+			color: #ffffff;
+		}
 
-#section-favoris h2 {
-	margin-top: 0;
-}
+		.dark-mode header {
+			background-color: #1a1a1a;
+		}
 
-#section-favoris p {
-	margin-bottom: 8px;
-}
+		.dark-mode #explication,
+		.dark-mode #mon_ip,
+		.dark-mode #bloc-recherche,
+		.dark-mode input[type="text"],
+		.dark-mode #btn-lancer-recherche,
+		.dark-mode #btn-favoris,
+		.dark-mode #btn-supp,
+		.dark-mode #erreur,
+		.dark-mode #text_map,
+		.dark-mode #section-favoris h2,
+		.dark-mode #info-vide {
+			color: #cccccc;
+		}
 
-#liste-favoris li {
-	margin-bottom: 8px;
-	cursor: pointer;
-}
+		.dark-mode hr {
+			border-top-color: #666666;
+		}
 
-#liste-favoris li span {
-	text-decoration: underline;
-}
+		.dark-mode #section-separation {
+			border-left-color: #00cc00;
+		}
 
-#liste-favoris li span:hover {
-	color: var(--main-green);
-}
+		.dark-mode #bloc-gif-attente {
+			color: #cccccc;
+		}
 
-/* Media-query pour gérer l'affichage sur petit écran */
-@media (max-width: 900px) {
-	#conteneur {
-		flex-direction: column-reverse;
-	}
+		.dark-mode #img-vide,
+		.dark-mode #img-pleine {
+			filter: invert(1);
+		}
 
-	#section-separation {
-		border-top: 2px dashed rgb(26, 188, 156);
-		margin: 0 -10px 40px -10px;
-	}
-
-	#section-favoris {
-		flex: 0;
-	}
-}
-
-#autocomplete-container {
-	position: absolute;
-	width: 100%;
-	z-index: 1;
-	background-color: black;
-	border: 1px solid #ccc;
-  }
-  
-  .autocomplete-suggestion {
-	padding: 5px;
-	cursor: pointer;
-  }
-  
-  .autocomplete-suggestion:hover {
-	background-color: red;
-  }
-  
-  /* Style pour l'élément <select> */
-#vulnerabilitiesSelect {
-	color: green;
-	font-weight: bold;
-  }
-  
-  /* Style pour l'élément <option> */
-  #vulnerabilitiesSelect option {
-	color: green;
-  }
-  
-  /* Style pour l'élément <option> lors du survol */
-  #vulnerabilitiesSelect option:hover {
-	color: red;
-	background-color: white;
-  }
-  
+		.dark-mode #map {
+			background-color: #333333;
+		}
