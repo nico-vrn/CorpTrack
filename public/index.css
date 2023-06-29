@@ -1,13 +1,13 @@
 
 		body {
-			background-color: #252525;
+			background-color: #3e4348;
 			color: #ffffff;
 			margin: 0;
 			padding: 0;
 		}
 
 		header {
-			background-color: #1f1f1f;
+			background-color: #004a98;
 			padding: 20px;
 			text-align: center;
 		}
@@ -16,18 +16,36 @@
 			color: #ffffff;
 			font-size: 70px;
 			margin: 0;
+			font-family: 'Roboto', sans-serif;
+		}
+
+		p {
+			color: #cccccc;
+			font-size: 16px;
+			margin: 0;
+			font-family: 'Roboto', sans-serif;
+		}
+
+		a {
+			color: #cccccc;
+			font-size: 14px;
+			text-decoration: none;
+			font-family: 'Roboto', sans-serif;
 		}
 
 		#explication {
 			color: #cccccc;
 			font-size: 25px;
 			margin: 20px 0;
+			font-family: 'Roboto', sans-serif;
 		}
 
 		#mon_ip {
 			color: #cccccc;
 			font-size: 14px;
 			text-decoration: none;
+			font-family: 'Roboto', sans-serif;
+
 		}
 
 		hr {
@@ -67,6 +85,8 @@
 			font-size: 16px;
 			border-radius: 5px;
 			border: none;
+			font-family: 'Roboto', sans-serif;
+
 		}
 
 		#btn-lancer-recherche,
@@ -115,12 +135,16 @@
 			color: #ff0000;
 			font-size: 16px;
 			margin-bottom: 20px;
+			font-family: 'Roboto', sans-serif;
+
 		}
 
 		#text_map {
 			color: #ffffff;
 			font-size: 18px;
 			margin-bottom: 10px;
+			font-family: 'Roboto', sans-serif;
+
 		}
 
 		#map {
@@ -134,6 +158,8 @@
 			font-size: 24px;
 			margin: 0;
 			margin-bottom: 10px;
+			font-family: 'Roboto', sans-serif;
+
 		}
 
 		#liste-favoris {
@@ -149,6 +175,7 @@
 		#info-vide {
 			color: #cccccc;
 			font-size: 14px;
+			font-family: 'Roboto', sans-serif;
 			margin: 10px 0;
 		}
 

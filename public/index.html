@@ -6,13 +6,15 @@
 		<link rel="shortcut icon" type="image/x-icon" href="images/logo_corptrack.png">
 		<link rel="stylesheet" href="index.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-yDwe6osBsDIBGr0vD+vDS4t6KJhRE2pO0FkRZwZ8mS8nqHjG8S2ncxwW7km4TZ92Qn8LEh/57O2Lys/XfGK1ow==" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 		
 	</head>
 	<body onload="affiche_fav()">
 		<header>
 			<h1>Corp Track</h1>
-			<p id="explication">Identifiez rapidement les vulnérabilités des entreprises françaises grâce à notre outil de recherche avancée en matière de sécurité.</p>
+			<p id="explication">Identifiez rapidement les vulnérabilités et les informations liées aux entreprises françaises grâce à notre outil de recherche </p>
 			<a id="mon_ip">Votre IP est : (en attente de requête)</a>
 		</header>
 		<hr>
@@ -55,10 +57,10 @@
 			<!-- Section des recherches favorites -->
 			<section id="section-favoris">
 				<h2>Recherches favorites</h2>
-				<p>Cliquer sur une recherche favorite ci-dessous pour la relancer :</p>
+				<p>Cliquez sur une recherche favorite ci-dessous pour la relancez :</p>
 				<ul id="liste-favoris"></ul>
-				<p id="info-vide">( &empty; Aucune recherche enregistrée )</p>
-				<button id="btn-supp" type="button" class="btn_clicable" title="Supprimer tous les favoris">Supprimer toutes les favoris</button>
+				<p id="info-vide">( Vous n'avez enregistré aucune recherche  )</p>
+				<button id="btn-supp" type="button" class="btn_clicable" title="Supprimer tous les favoris">Supprimer tous les favoris</button>
 			</section>
 		</main>
 		<script src="app.js"></script>
