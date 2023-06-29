@@ -1,273 +1,224 @@
-/* Importation de la police Roboto */
-@import url(https://fonts.googleapis.com/css?family=Roboto);
 
-/* Définition des principales couleurs */
-:root {
-	--text-color : #fafafa; /* Texte presque blanc */
-	--background: #34495e; /* Fond bleu foncé */
-	--main-green: rgb(26, 188, 156);
-	--active-green: rgb(20, 156, 128);
-}
+		body {
+			background-color: #3e4348;
+			color: #ffffff;
+			margin: 0;
+			padding: 0;
+		}
 
-* {
-	color: var(--text-color) ;
-}
+		header {
+			background-color: #004a98;
+			padding: 20px;
+			text-align: center;
+		}
 
-body {
-	background-color: var(--background);
-	font: 14pt Roboto, Arial, sans-serif;
-	margin: 0;
-	padding: 0;
-	width: 90%;
-	margin: 40px auto;
-}
+		h1 {
+			color: #ffffff;
+			font-size: 70px;
+			margin: 0;
+			font-family: 'Roboto', sans-serif;
+		}
 
-/* Paragraphes "Aucun résultat..." et "Aucune recherche..." */
-p.info-vide {
-	font-style: italic;
-}
+		p {
+			color: #cccccc;
+			font-size: 16px;
+			margin: 0;
+			font-family: 'Roboto', sans-serif;
+		}
 
-/* Partie En-tête */
-h1 {
-	/* margin-top: 1em; */
-	text-align: center;
-	font-variant: small-caps;
-	font-size: 2.5em;
-	color: var(--main-green);
-}
+		a {
+			color: #cccccc;
+			font-size: 14px;
+			text-decoration: none;
+			font-family: 'Roboto', sans-serif;
+		}
 
-p#explication {
-	font-size: 1.2em;
-}
+		#explication {
+			color: #cccccc;
+			font-size: 25px;
+			margin: 20px 0;
+			font-family: 'Roboto', sans-serif;
+		}
 
-/* Conteneur principal */
-#conteneur {
-	display: flex;
-	flex: 1;
-	margin: 30px auto;
-}
+		#mon_ip {
+			color: #cccccc;
+			font-size: 14px;
+			text-decoration: none;
+			font-family: 'Roboto', sans-serif;
 
-/* Section Recherche (avec résultats) */
-#section-recherche {
-	margin-top: 0;
-	flex: 1 1 auto;
-}
+		}
 
-#bloc-recherche {
-	display: flex;
-	margin: 0 auto ;
-	min-width: 450px;
-	flex-direction: row;
-}
+		hr {
+			border: none;
+			border-top: 1px solid #333333;
+			margin: 0;
+		}
 
-#bloc-recherche>input[type=text],
-#bloc-recherche>button {
-	display: block;
-	font-size: 1.2em ;
-}
+		#conteneur {
+			display: flex;
+			justify-content: space-between;
+			padding: 20px;
+		}
 
-#bloc-recherche>input[type=text] {
-	color: #2d2d2d; /* Presque noir */
-	flex: 1;
-	padding: 0.7em;
-	border: 0.3em solid var(--main-green);
-}
+		#section-recherche {
+			width: 60%;
+		}
 
-#bloc-recherche>button {
-	padding: 0.8em 0.8em;
-	/* Bordure invisible pour que le hover ne bouge pas le bouton */
-	border: 1px solid var(--main-green);
+		#section-separation {
+			border-left: 2px solid #0442c1;
+			margin: 0 20px;
+		}
 
-	/* Par défaut, les boutons sont en gris
-	 (S'ils sont "clicables", ils passent en vert) */
-	background-color: #bebebe;
-}
+		#section-favoris {
+			width: 35%;
+		}
 
-/* Apparences des boutons clicables */
-#bloc-recherche>button.btn_clicable {
-	background-color: var(--main-green);
-}
+		#bloc-recherche {
+			display: flex;
+			align-items: center;
+			margin-bottom: 20px;
+		}
 
-#bloc-recherche>button:focus {
-	/* Pour éviter un affichage disgracieux
-		quand le bouton reste en focus */
-	outline: 0 !important;
-}
+		input[type="text"] {
+			width: 100%;
+			padding: 10px;
+			font-size: 16px;
+			border-radius: 5px;
+			border: none;
+			font-family: 'Roboto', sans-serif;
 
-#bloc-recherche>button.btn_clicable:hover {
-	cursor: pointer;
-	border: 1px solid white;
-}
+		}
 
-#bloc-recherche>button.btn_clicable:active {
-	background-color: var(--active-green);
-}
+		#btn-lancer-recherche,
+		#btn-favoris,
+		#btn-supp {
+			background-color: #333333;
+			border: none;
+			border-radius: 5px;
+			padding: 10px;
+			margin-left: 10px;
+			cursor: pointer;
+		}
 
-.autocomplete-items {
-	border: 1px solid #d4d4d4;
-	border-bottom: none;
-	border-top: none;
-	z-index: 99;
-	top: 100%;
-	left: 0;
-	right: 0;
-  }
-  
-  .autocomplete-items div {
-	padding: 10px;
-	cursor: pointer;
-	border-bottom: 1px solid #d4d4d4; 
-  }
-  
-  .autocomplete-items div:hover {
-	cursor: pointer;
-	border: 1px solid red;
-  }
-  
-  .autocomplete-active {
-	background-color: DodgerBlue !important; 
-	color: #ffffff; 
-  }
+		#btn-lancer-recherche:hover,
+		#btn-favoris:hover,
+		#btn-supp:hover {
+			background-color: #444444;
+		}
 
-#btn-supp{
-	background-color: var(--main-green);
-}
-#btn-supp:focus {
-	/* Pour éviter un affichage disgracieux
-		quand le bouton reste en focus */
-	outline: 0 !important;
-}
+		.btn_clicable {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
-#btn-supp:hover {
-	cursor: pointer;
-	border: 1px solid white;
-}
-#btn-supp:active {
-	background-color: var(--active-green);
-}
+		#img-vide,
+		#img-pleine {
+			margin-right: 5px;
+		}
 
-#mon_ip:focus {
-	/* Pour éviter un affichage disgracieux
-		quand le bouton reste en focus */
-	outline: 0 !important;
-}
+		#autocomplete-container {
+			margin-bottom: 20px;
+		}
 
-#mon_ip:hover {
-	cursor: pointer;
-	border: 1px solid white;
-}
-#mon_ip:active {
-	background-color: var(--active-green);
-}
+		#bloc-gif-attente {
+			display: flex;
+			justify-content: center;
+			margin-bottom: 20px;
+		}
 
-/* GIF de chargement (caché par défaut) */
-#bloc-gif-attente {
-	display: none;
-	margin: 40px;
-	text-align: center;
-}
-#map{ /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
-	height:400px;
-	display: none;
-}
+		#bloc-resultats {
+			margin-bottom: 20px;
+		}
 
-#text_map{
-	display: none;
-}
-#img-pleine{
-	display:none;
-}
-#info-video{
-	display: none;
-}
+		#erreur {
+			color: #ff0000;
+			font-size: 16px;
+			margin-bottom: 20px;
+			font-family: 'Roboto', sans-serif;
 
-#bloc-resultats p.res::before{
-	/* Affichage d'une flèche devant chaque résultat
-		(Cf. https://unicode-table.com/fr/21E8/ ) */
-	content: "\21E8\00A0";
-}
+		}
 
-/* Section de la barre de séparation */
-#section-separation {
-	border-left: 2px dashed var(--main-green);
-	margin: 0 20px;
-}
+		#text_map {
+			color: #ffffff;
+			font-size: 18px;
+			margin-bottom: 10px;
+			font-family: 'Roboto', sans-serif;
 
-/* Section des recherches favorites */
-#section-favoris {
-	flex: 0 0 300px;
-	margin-top: 0;
-	margin-bottom: 20px;
-}
+		}
 
-#section-favoris h2 {
-	margin-top: 0;
-}
+		#map {
+			height: 300px;
+			border-radius: 5px;
+			overflow: hidden;
+		}
 
-#section-favoris p {
-	margin-bottom: 8px;
-}
+		#section-favoris h2 {
+			color: #ffffff;
+			font-size: 24px;
+			margin: 0;
+			margin-bottom: 10px;
+			font-family: 'Roboto', sans-serif;
 
-#liste-favoris li {
-	margin-bottom: 8px;
-	cursor: pointer;
-}
+		}
 
-#liste-favoris li span {
-	text-decoration: underline;
-}
+		#liste-favoris {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
 
-#liste-favoris li span:hover {
-	color: var(--main-green);
-}
+		#liste-favoris li {
+			margin-bottom: 5px;
+		}
 
-/* Media-query pour gérer l'affichage sur petit écran */
-@media (max-width: 900px) {
-	#conteneur {
-		flex-direction: column-reverse;
-	}
+		#info-vide {
+			color: #cccccc;
+			font-size: 14px;
+			font-family: 'Roboto', sans-serif;
+			margin: 10px 0;
+		}
 
-	#section-separation {
-		border-top: 2px dashed rgb(26, 188, 156);
-		margin: 0 -10px 40px -10px;
-	}
+		.dark-mode {
+			background-color: #000000;
+			color: #ffffff;
+		}
 
-	#section-favoris {
-		flex: 0;
-	}
-}
+		.dark-mode header {
+			background-color: #1a1a1a;
+		}
 
-#autocomplete-container {
-	position: absolute;
-	width: 100%;
-	z-index: 1;
-	background-color: black;
-	border: 1px solid #ccc;
-  }
-  
-  .autocomplete-suggestion {
-	padding: 5px;
-	cursor: pointer;
-  }
-  
-  .autocomplete-suggestion:hover {
-	background-color: red;
-  }
-  
-  /* Style pour l'élément <select> */
-#vulnerabilitiesSelect {
-	color: green;
-	font-weight: bold;
-  }
-  
-  /* Style pour l'élément <option> */
-  #vulnerabilitiesSelect option {
-	color: green;
-  }
-  
-  /* Style pour l'élément <option> lors du survol */
-  #vulnerabilitiesSelect option:hover {
-	color: red;
-	background-color: white;
-  }
-  
+		.dark-mode #explication,
+		.dark-mode #mon_ip,
+		.dark-mode #bloc-recherche,
+		.dark-mode input[type="text"],
+		.dark-mode #btn-lancer-recherche,
+		.dark-mode #btn-favoris,
+		.dark-mode #btn-supp,
+		.dark-mode #erreur,
+		.dark-mode #text_map,
+		.dark-mode #section-favoris h2,
+		.dark-mode #info-vide {
+			color: #cccccc;
+		}
+
+		.dark-mode hr {
+			border-top-color: #666666;
+		}
+
+		.dark-mode #section-separation {
+			border-left-color: #00cc00;
+		}
+
+		.dark-mode #bloc-gif-attente {
+			color: #cccccc;
+		}
+
+		.dark-mode #img-vide,
+		.dark-mode #img-pleine {
+			filter: invert(1);
+		}
+
+		.dark-mode #map {
+			background-color: #333333;
+		}

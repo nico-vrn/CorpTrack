@@ -5,73 +5,63 @@
 		<meta charset="utf-8">
 		<link rel="shortcut icon" type="image/x-icon" href="images/logo_corptrack.png">
 		<link rel="stylesheet" href="index.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-yDwe6osBsDIBGr0vD+vDS4t6KJhRE2pO0FkRZwZ8mS8nqHjG8S2ncxwW7km4TZ92Qn8LEh/57O2Lys/XfGK1ow==" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+		
 	</head>
 	<body onload="affiche_fav()">
 		<header>
 			<h1>Corp Track</h1>
-
-			<p id="explication">Site d'information et de recherche de vulnérabilités sur les entreprises Française à visé d'OSINT principalement.</p>
-			<a id="mon_ip">Votre IP est : (en attende de requête)</a>
+			<p id="explication">Identifiez rapidement les vulnérabilités et les informations liées aux entreprises françaises grâce à notre outil de recherche </p>
+			<a id="mon_ip">Votre IP est : (en attente de requête)</a>
 		</header>
 		<hr>
-
+	
 		<main id="conteneur">
 			<!-- Section de recherche (avec résultats) -->
 			<section id="section-recherche">
 				<div id="bloc-recherche">
 					<!-- Champ de recherche -->
 					<input type="text" id="champs_recherche" list="list" placeholder="GOOGLE or 8.8.8.8 or 2001:4860:4860::8844 or www.mondomaine.fr"/>
-					
 					<!-- Boutons -->
-					<button id="btn-lancer-recherche" type="button"
-					class="btn_clicable" title="Lancer la recherche">
+					<button id="btn-lancer-recherche" type="button" class="btn_clicable" title="Lancer la recherche">
 						<!-- Icone provenant de flaticon.com -->
-						<img src="images/loupe.svg" alt="Loupe pour recherche" width=22 >
+						<img src="images/loupe.svg" alt="Loupe pour recherche" width="22">
 					</button>
-
-					<button id="btn-favoris" class="btn_clicable" type="button"
-					title="Ajouter la recherche aux favoris">
+					<button id="btn-favoris" class="btn_clicable" type="button" title="Ajouter la recherche aux favoris">
 						<!-- Icone étoile vide => Recherche pas en favoris -->
-						<img id="img-vide" src="images/etoile-vide.svg" alt="Etoile vide" width=22 >
-
+						<img id="img-vide" src="images/etoile-vide.svg" alt="Etoile vide" width="22">
 						<!-- Icone étoile pleine => Recherche en favoris -->
-						<img id="img-pleine" src="images/etoile-pleine.svg" alt="Etoile pleine" width=22 >
-
+						<img id="img-pleine" src="images/etoile-pleine.svg" alt="Etoile pleine" width="22">
 						<!-- (Icones provenant de flaticon.com) -->
 					</button>
 				</div>
 				<div id="autocomplete-container"></div>
 				<!-- Résultats de recherche -->
 				<div id="bloc-gif-attente">
-					<img src='images/attente-ajax.gif' alt="GIF Attente de résultats" width=50 />
+					<img src="images/attente-ajax.gif" alt="GIF Attente de résultats" width="50">
 				</div>
-				<div id="bloc-resultats">
-				</div>
-				<div id="erreur">
-				</div>
+				<div id="bloc-resultats"></div>
+				<div id="erreur"></div>
 				<!--The div element for the map -->
 				<u><h3 id="text_map">Localisation sur la carte :</h3></u>
 				<div id="map"></div>
-
-				<script src="https://maps.google.com/maps/api/js?key=AIzaSyCqBkmIwBzH6luEpqvdJ9fx0RDPYKbo2JI" type="text/javascript"></script>
+				<script src="https://maps.google.com/maps/api/js?key=YOUR_API_KEY" type="text/javascript"></script>
 			</section>
-
+	
 			<!-- Section de séparation (avec la bordure verte) -->
 			<section id="section-separation"></section>
-
+	
 			<!-- Section des recherches favorites -->
 			<section id="section-favoris">
 				<h2>Recherches favorites</h2>
-				<p>Cliquer sur une recherche favorite ci-dessous pour relancer celle-ci :</p>
-				<ul id="liste-favoris">
-					
-				</ul>
-				<p id="info-vide">( &empty; Aucune recherche enregistrée )</p>
-				<button id="btn-supp" type="button"
-				class="btn_clicable" title="Supprimer tout les favoris">Supprimer tout les favoris</button>
+				<p>Cliquez sur une recherche favorite ci-dessous pour la relancez :</p>
+				<ul id="liste-favoris"></ul>
+				<p id="info-vide">( Vous n'avez enregistré aucune recherche  )</p>
+				<button id="btn-supp" type="button" class="btn_clicable" title="Supprimer tous les favoris">Supprimer tous les favoris</button>
 			</section>
-
-
 		</main>
 		<script src="app.js"></script>
 	</body>
