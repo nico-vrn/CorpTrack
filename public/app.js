@@ -137,6 +137,8 @@ function vider_resultat() {
   companies_autocompletion = [];
   vulnerabilities = [];
   shodanData = [];
+  latitude = null;
+  longitude = null;
 }
 
 
