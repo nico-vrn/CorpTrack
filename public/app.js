@@ -547,7 +547,6 @@ function request(url, retour, autre) {
     .then(data => retour(data, autre));
 }
 
-
 /* ------------------------------------------
 
 gestion de la map
@@ -555,7 +554,7 @@ gestion de la map
 ------------------------------------------ */
 
 //fonction d'initialisation de la carte
-function initMap(lat, lon) {
+function initMap(lat,lon) {
   // Créer l'objet "map" et l'insèrer dans l'élément HTML qui a l'ID "map"
   map = new google.maps.Map(document.getElementById("map"), {
     // Nous plaçons le centre de la carte avec les coordonnées ci-dessus
@@ -569,21 +568,21 @@ function initMap(lat, lon) {
     // Nous désactivons la roulette de souris
     scrollwheel: false,
     mapTypeControlOptions: {
-      // Cette option sert à définir comment les options se placent
-      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
+        // Cette option sert à définir comment les options se placent
+        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
     },
     // Activation des options de navigation dans la carte (zoom...)
     navigationControl: true,
     navigationControlOptions: {
-      // Comment ces options doivent-elles s'afficher
-      style: google.maps.NavigationControlStyle.ZOOM_PAN
+        // Comment ces options doivent-elles s'afficher
+        style: google.maps.NavigationControlStyle.ZOOM_PAN
     }
   });// Nous ajoutons un marqueur
   var marker = new google.maps.Marker({
-    // Nous définissons sa position (syntaxe json)
-    position: { lat: lat, lng: lon },
-    // Nous définissons à quelle carte il est ajouté
-    map: map
+  // Nous définissons sa position (syntaxe json)
+  position: {lat: lat, lng: lon},
+  // Nous définissons à quelle carte il est ajouté
+  map: map
   });
 }
 
