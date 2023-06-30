@@ -26,6 +26,7 @@
 - Node.js installé (version recommandée : 14.x ou supérieure)
 - Un éditeur de code tel que Visual Studio Code
 - Une clé d'[API shodan](https://developer.shodan.io/api) valide
+- Une clé d'[API Google](https://developers.google.com/?hl=fr) valide
 
 ## Installation
 
