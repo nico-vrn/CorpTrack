@@ -425,6 +425,7 @@ function afficher_resultat(definition) {
 
     //selectionne les informations choisies de l'IP 
     ipInfo.innerHTML = `<h3>Informations venant de Shodan :</h3> 
+                        <p><strong> Entreprise : </strong> ${shodanData.org}</p>
                         <p><strong>Adresse IP :</strong> ${shodanData.ip_str}</p>
                         <p><strong>Ville :</strong> ${shodanData.city} (${shodanData.region_code})</p>
                         <p><strong>Pays :</strong> ${shodanData.country_name} (${shodanData.country_code})</p>
@@ -492,7 +493,7 @@ function afficher_resultat(definition) {
   if (vulnerabilities && vulnerabilities.length > 0) {
     const vulnInfo = document.createElement("div");
 
-    vulnInfo.innerHTML = `<h3>Vulnérabilités trouvées (${vulnerabilities.length}) :</h3>
+    vulnInfo.innerHTML = `<h3>Vulnérabilités trouvées (30 derniers jours) (${vulnerabilities.length}) :</h3>
                         <p>Vous pouvez consulter les détails de chaque vulnérabilité en cliquant sur son nom dans la liste.</p>`;
 
 
