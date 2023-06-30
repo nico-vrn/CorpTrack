@@ -194,7 +194,7 @@ async function rechercher() {
         nom_societe = nom_societe.split(" ")[0];
         console.log("nom_societe:", nom_societe)
         terme_recherche = nom_societe; //récupère le nom de l'entreprise
-
+        await rechercher_vulnerabilites(terme_recherche, dateAncienne, dateActuelle);
       }
 
     } else if (estUnDomaine(terme_recherche) == true) { //Si c'est un domaine
